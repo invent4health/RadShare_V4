@@ -1,95 +1,68 @@
-import { size } from 'platform/ui/src/components/Button/ButtonEnums';
 import React from 'react';
 
 const ContextMenu = ({ commands, onClose }) => {
-  const handleButtonClick = buttonId => {
+  // Function to handle button activation
+  const handleButtonClick = toolId => {
     try {
-      const toolbarService = commands?.toolbarService;
-
-      if (!toolbarService) {
-        throw new Error('Toolbar service not available');
-      }
-
-      const toolbarButtons = toolbarService.state?.buttons;
-      if (!toolbarButtons) {
-        throw new Error('Toolbar buttons not available');
-      }
-
-      const button = toolbarButtons[buttonId];
-      if (!button) {
-        throw new Error(`Button ${buttonId} not found in toolbar`);
-      }
-
-      // Activate the button using recordInteraction
-      toolbarService.recordInteraction(buttonId);
-
-      // Close the context menu after successful click
+      // Activate the selected tool
+      commands.run('activateToolById', { itemId: toolId });
+      // Close the menu
       onClose();
-
-      console.log(`Activated ${buttonId}:`, button);
-      console.log('toolbarService', toolbarService);
+      console.log(`Activated tool: ${toolId}`);
     } catch (error) {
-      console.error('Context Menu Error:', error.message);
+      console.error('Error activating tool:', error.message);
     }
   };
 
-  const availableButtons = commands?.toolbarService?.state?.buttons || {};
-
-  const contextMenuButtons = [
+  // List of tools
+  const toolOptions = [
     'Zoom',
     'Pan',
-    'Magnify',
+    'Length',
     'Rotate Right',
     'Reset View',
     'MeasurementTools',
+    'Bidirectional',
+    'ArrowAnnotate',
+    'EllipticalROI',
+    'RectangleROI',
+    'PlanarFreehandROI',
   ];
 
   return (
-    <div className="context-menu">
+    <div className="context-menu w-[fit-content]">
       <ul
         style={{
           listStyle: 'none',
           padding: 0,
           margin: 0,
-          width: '150px',
+          width: '100px',
         }}
-        className="context-menu"
       >
-        {contextMenuButtons.map(buttonId => (
+        {toolOptions.map(toolId => (
           <li
-            key={buttonId}
+            key={toolId}
             style={{
               padding: '5px 10px',
               borderBottom: '1px solid #eee',
             }}
           >
-            {availableButtons[buttonId] ? (
-              <button
-                onClick={() => handleButtonClick(buttonId)}
-                title={availableButtons[buttonId].props?.tooltip || buttonId}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
-                  width: '100%',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  color: '#FFF',
-                  fontSize: '10',
-                }}
-              >
-                {buttonId}
-              </button>
-            ) : (
-              <span
-                style={{
-                  color: '#888',
-                  display: 'block',
-                }}
-              >
-                {buttonId} (N/A)
-              </span>
-            )}
+            <button
+              onClick={() => handleButtonClick(toolId)}
+              title={toolId}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                width: '100%',
+                textAlign: 'left',
+                cursor: 'pointer',
+                color: '#FFF',
+                fontSize: '10px',
+              }}
+            >
+              {toolId}
+            </button>
           </li>
         ))}
       </ul>

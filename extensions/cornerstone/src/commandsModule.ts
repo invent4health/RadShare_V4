@@ -189,12 +189,53 @@ function commandsModule({
           uiModalService.show({
             content: contextmenu,
             contentProps: {
-              commands: servicesManager.services,
+              commands: commandsManager,
               onClose: () => uiModalService.hide(),
             },
           });
         }
       }
+    },
+
+    activateToolById: ({ itemId, toolGroupId }) => {
+      const { viewports } = viewportGridService.getState();
+
+      if (!viewports.size) {
+        console.warn('No viewports available to activate tool.');
+        return;
+      }
+
+      // Default to the active viewport's tool group if none provided
+      toolGroupId = toolGroupId ?? _getActiveViewportToolGroupId();
+      const toolGroup = toolGroupService.getToolGroup(toolGroupId);
+
+      if (!toolGroup) {
+        console.warn(`No tool group found for ID: ${toolGroupId}`);
+        return;
+      }
+
+      if (!toolGroup.hasTool(itemId)) {
+        console.warn(`Tool ${itemId} not found in tool group ${toolGroupId}`);
+        return;
+      }
+
+      // Deactivate the current active tool, if any
+      const activeToolName = toolGroup.getActivePrimaryMouseButtonTool();
+      if (activeToolName && activeToolName !== itemId) {
+        toolGroup.setToolPassive(activeToolName);
+      }
+
+      // Activate the specified tool
+      toolGroup.setToolActive(itemId, {
+        bindings: [
+          {
+            mouseButton: Enums.MouseBindings.Primary,
+          },
+        ],
+      });
+
+      const renderingEngine = cornerstoneViewportService.getRenderingEngine();
+      renderingEngine.render();
     },
 
     updateStoredSegmentationPresentation: ({ displaySet, type }) => {
@@ -1828,6 +1869,9 @@ function commandsModule({
     },
     imgMode: {
       commandFn: actions.imgMode,
+    },
+    activateToolById:{
+      commandFn: actions.activateToolById,
     },
     // activateReportpanel: {
     //   commandFn: actions.activateReportpanel,
