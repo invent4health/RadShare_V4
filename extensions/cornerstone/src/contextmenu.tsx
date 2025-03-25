@@ -1,14 +1,30 @@
 import React from 'react';
 
-const ContextMenu = ({ commands, onClose }) => {
+const ContextMenu = ({ commands, onClose, other }) => {
   // Function to handle button activation
-  const handleButtonClick = toolId => {
+  const handleButtonClick = (toolId) => {
     try {
-      // Activate the selected tool
-      commands.run('activateToolById', { itemId: toolId });
+      let runWarning = false;
+
+      // Ensure commands exist before calling run
+      if (commands?.run) {
+        const result = commands.run('activateToolById', { itemId: toolId });
+
+        // Check if result contains a warning
+        if (result && result.warning) {
+          runWarning = true;
+        }
+      }
+
+      // If we got a warning, call other.recordInteraction
+      if (runWarning && other?.recordInteraction) {
+        other.recordInteraction(toolId);
+      }
+
       // Close the menu
       onClose();
-      console.log(`Activated tool: ${toolId}`);
+
+      console.log(`Activated tool: ${toolId}, Warning: ${runWarning}`);
     } catch (error) {
       console.error('Error activating tool:', error.message);
     }
@@ -21,7 +37,6 @@ const ContextMenu = ({ commands, onClose }) => {
     'Length',
     'Rotate Right',
     'Reset View',
-    'MeasurementTools',
     'Bidirectional',
     'ArrowAnnotate',
     'EllipticalROI',
@@ -34,12 +49,12 @@ const ContextMenu = ({ commands, onClose }) => {
       <ul
         style={{
           listStyle: 'none',
-          padding: 0,
+          padding: '5px',
           margin: 0,
-          width: '100px',
+          width: '120px', // Adjusted width for better readability
         }}
       >
-        {toolOptions.map(toolId => (
+        {toolOptions.map((toolId) => (
           <li
             key={toolId}
             style={{

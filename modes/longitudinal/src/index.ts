@@ -73,17 +73,9 @@ const extensionDependencies = {
   '@ohif/extension-dicom-pdf': '^3.0.1',
   '@ohif/extension-dicom-video': '^3.0.1',
 };
-
 function modeFactory({ modeConfiguration }) {
   let _activatePanelTriggersSubscriptions = [];
-  // const checkUnsavedChanges = () => {
-  //   const hasUnsavedChanges = JSON.parse(localStorage.getItem('hasUnsavedChanges'));
-  //   // console.log("Unsaved changes status:", hasUnsavedChanges); // Debugging
-  //   if (hasUnsavedChanges) {
-  //     return 'You have unsaved changes. Are you sure you want to leave?';
-  //   }
-  //   return undefined; // No alert if no unsaved changes
-  // };
+
   const beforeUnloadHandler = event => {
     const isSaved = JSON.parse(localStorage.getItem('isSaved'));
     const isEdited = JSON.parse(localStorage.getItem('isEdited'));
@@ -92,27 +84,25 @@ function modeFactory({ modeConfiguration }) {
       localStorage.setItem('isSaved', JSON.stringify(false));
       localStorage.setItem('isEdited', JSON.stringify(false));
 
-      event.preventDefault(); // Standard method
-      event.returnValue = ''; // Ensures browser warning shows up
+      event.preventDefault();
+      event.returnValue = '';
     }
   };
 
+  // Function to check if multimonitor is specified in the URL
+  const isMultimonitor = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('multimonitor') === 'true'; // e.g., ?multimonitor=true
+  };
+
   return {
-    // TODO: We're using this as a route segment
-    // We should not be.
     id,
     routeName: 'viewer',
     displayName: i18n.t('Modes:Basic Viewer'),
-    /**
-     * Lifecycle hooks
-     */
-    onModeEnter: function ({ servicesManager, extensionManager, commandsManager }: withAppTypes) {
-      const { measurementService, toolbarService, toolGroupService, customizationService } =
-        servicesManager.services;
+    onModeEnter: function ({ servicesManager, extensionManager, commandsManager }) {
+      const { measurementService, toolbarService, toolGroupService } = servicesManager.services;
 
       measurementService.clearMeasurements();
-
-      // Init Default and SR ToolGroups
       initToolGroups(extensionManager, toolGroupService, commandsManager);
 
       toolbarService.addButtons([...toolbarButtons, ...moreTools, ...imgMode]);
@@ -128,8 +118,6 @@ function modeFactory({ modeConfiguration }) {
         'Layout',
         'Crosshairs',
         'Advanced-Magnify',
-        // 'Undo',
-        // 'Redo',
         'Reset View',
         'Rotate Right',
         'Flip Horizontal',
@@ -137,40 +125,11 @@ function modeFactory({ modeConfiguration }) {
         'Magnify',
         'Next Case',
         'ImgMode',
-        // 'Report',
       ]);
 
-      // // ActivatePanel event trigger for when a segmentation or measurement is added.
-      // // Do not force activation so as to respect the state the user may have left the UI in.
-      // _activatePanelTriggersSubscriptions = [
-      //   ...panelService.addActivatePanelTriggers(
-      //     cornerstone.segmentation,
-      //     [
-      //       {
-      //         sourcePubSubService: segmentationService,
-      //         sourceEvents: [segmentationService.EVENTS.SEGMENTATION_ADDED],
-      //       },
-      //     ],
-      //     true
-      //   ),
-      //   ...panelService.addActivatePanelTriggers(
-      //     tracked.measurements,
-      //     [
-      //       {
-      //         sourcePubSubService: measurementService,
-      //         sourceEvents: [
-      //           measurementService.EVENTS.MEASUREMENT_ADDED,
-      //           measurementService.EVENTS.RAW_MEASUREMENT_ADDED,
-      //         ],
-      //       },
-      //     ],
-      //     true
-      //   ),
-      //   true,
-      // ];
       window.addEventListener('beforeunload', beforeUnloadHandler);
     },
-    onModeExit: ({ servicesManager }: withAppTypes) => {
+    onModeExit: ({ servicesManager }) => {
       const {
         toolGroupService,
         syncGroupService,
@@ -195,11 +154,8 @@ function modeFactory({ modeConfiguration }) {
       study: [],
       series: [],
     },
-
     isValidMode: function ({ modalities }) {
       const modalities_list = modalities.split('\\');
-
-      // Exclude non-image modalities
       return {
         valid: !!modalities_list.filter(modality => NON_IMAGE_MODALITIES.indexOf(modality) === -1)
           .length,
@@ -210,16 +166,25 @@ function modeFactory({ modeConfiguration }) {
     routes: [
       {
         path: 'longitudinal',
-        /*init: ({ servicesManager, extensionManager }) => {
-          //defaultViewerRouteInit
-        },*/
         layoutTemplate: () => {
+          // Default right panels
+          const defaultRightPanels = [
+            cornerstone.segmentation,
+            tracked.measurements,
+            cornerstone.report,
+          ];
+
+          // Conditionally add tracked.thumbnailList to rightPanels if multimonitor is true
+          const rightPanels = isMultimonitor()
+            ? [...defaultRightPanels, tracked.thumbnailList]
+            : defaultRightPanels;
+
           return {
             id: ohif.layout,
             props: {
-              leftPanels: [tracked.thumbnailList],
+              leftPanels: [tracked.thumbnailList], // Original left panel configuration
               leftPanelResizable: true,
-              rightPanels: [cornerstone.segmentation, tracked.measurements, cornerstone.report],
+              rightPanels: rightPanels, // Dynamically adjusted right panels
               rightPanelClosed: true,
               rightPanelResizable: true,
               viewports: [
@@ -259,12 +224,7 @@ function modeFactory({ modeConfiguration }) {
       },
     ],
     extensions: extensionDependencies,
-    // Default protocol gets self-registered by default in the init
     hangingProtocol: 'default',
-    // Order is important in sop class handlers when two handlers both use
-    // the same sop class under different situations.  In that case, the more
-    // general handler needs to come last.  For this case, the dicomvideo must
-    // come first to remove video transfer syntax before ohif uses images
     sopClassHandlers: [
       dicomvideo.sopClassHandler,
       dicomSeg.sopClassHandler,
