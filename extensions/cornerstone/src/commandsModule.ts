@@ -146,6 +146,57 @@ function commandsModule({
     //   }
     //   commandsManager.run(options, optionsToUse);
     // },
+    // showCornerstoneContextMenu: options => {
+    //   const services = servicesManager.services;
+    //   const element = _getActiveViewportEnabledElement()?.viewport?.element;
+
+    //   const optionsToUse = { ...options, element };
+    //   const { useSelectedAnnotation, nearbyToolData, event } = optionsToUse;
+
+    //   if (useSelectedAnnotation && !nearbyToolData) {
+    //     const firstAnnotationSelected = getFirstAnnotationSelected(element);
+    //     const isToolAllowed =
+    //       !optionsToUse.allowedSelectedTools ||
+    //       optionsToUse.allowedSelectedTools.includes(firstAnnotationSelected?.metadata?.toolName);
+
+    //     if (isToolAllowed) {
+    //       optionsToUse.nearbyToolData = firstAnnotationSelected;
+    //     } else {
+    //       return;
+    //     }
+    //   }
+
+    //   if (optionsToUse.nearbyToolData) {
+    //     optionsToUse.defaultPointsPosition = commandsManager.runCommand(
+    //       'getToolDataActiveCanvasPoints',
+    //       { toolData: optionsToUse.nearbyToolData }
+    //     );
+
+    //     optionsToUse.selectorProps = {
+    //       toolName: optionsToUse.nearbyToolData?.metadata?.toolName,
+    //       value: optionsToUse.nearbyToolData,
+    //       uid: optionsToUse.nearbyToolData?.annotationUID,
+    //       nearbyToolData: optionsToUse.nearbyToolData,
+    //       event,
+    //       ...optionsToUse.selectorProps,
+    //     };
+
+    //     commandsManager.run(options, optionsToUse);
+    //   } else {
+    //     const { uiModalService } = servicesManager.services;
+
+    //     if (uiModalService) {
+    //       uiModalService.show({
+    //         content: contextmenu,
+    //         contentProps: {
+    //           commands: commandsManager,
+    //           onClose: () => uiModalService.hide(),
+    //           other: servicesManager.services.toolbarService,
+    //         },
+    //       });
+    //     }
+    //   }
+    // },
     showCornerstoneContextMenu: options => {
       const services = servicesManager.services;
       const element = _getActiveViewportEnabledElement()?.viewport?.element;
@@ -185,13 +236,13 @@ function commandsModule({
       } else {
         const { uiModalService } = servicesManager.services;
 
-        if (uiModalService) {
+        if (uiModalService && event) {
           uiModalService.show({
             content: contextmenu,
             contentProps: {
               commands: commandsManager,
               onClose: () => uiModalService.hide(),
-              other :servicesManager.services.toolbarService,
+              other: servicesManager.services.toolbarService,
             },
           });
         }
@@ -239,7 +290,6 @@ function commandsModule({
     //   renderingEngine.render();
     // },
 
-
     activateToolById: ({ itemId, toolGroupId }) => {
       const { viewports } = viewportGridService.getState();
 
@@ -282,8 +332,6 @@ function commandsModule({
 
       return true; // Success
     },
-
-
 
     updateStoredSegmentationPresentation: ({ displaySet, type }) => {
       const { addSegmentationPresentationItem } = useSegmentationPresentationStore.getState();
@@ -1917,7 +1965,7 @@ function commandsModule({
     imgMode: {
       commandFn: actions.imgMode,
     },
-    activateToolById:{
+    activateToolById: {
       commandFn: actions.activateToolById,
     },
     // activateReportpanel: {

@@ -13,7 +13,7 @@ const disabledClasses =
 const sizeClasses = {
   default: {
     buttonSizeClass: 'w-10 h-10',
-    iconSizeClass: 'h-7 w-7',
+    iconSizeClass: 'h-11 w-11',
   },
   small: {
     buttonSizeClass: 'w-8 h-8',

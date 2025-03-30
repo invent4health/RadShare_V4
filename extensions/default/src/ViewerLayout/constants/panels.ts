@@ -1,9 +1,12 @@
+const urlParams = new URLSearchParams(window.location.search);
+const isMultiMonitor = urlParams.has('multimonitor');
+
 const expandedInsideBorderSize = 0;
 const collapsedInsideBorderSize = 4;
 const collapsedOutsideBorderSize = 4;
 const collapsedWidth = 25;
 
-const rightPanelInitialExpandedWidth = 550;
+const rightPanelInitialExpandedWidth = isMultiMonitor ? 282 : 600;
 const leftPanelInitialExpandedWidth = 282;
 
 const panelGroupDefinition = {
@@ -15,15 +18,10 @@ const panelGroupDefinition = {
     collapsedWidth,
   },
   left: {
-    // id
     panelId: 'viewerLayoutResizableLeftPanel',
-    // expanded width
     initialExpandedWidth: leftPanelInitialExpandedWidth,
-    // expanded width + expanded inside border
     minimumExpandedOffsetWidth: 145 + expandedInsideBorderSize,
-    // initial expanded width
     initialExpandedOffsetWidth: leftPanelInitialExpandedWidth + expandedInsideBorderSize,
-    // collapsed width + collapsed inside border + collapsed outside border
     collapsedOffsetWidth: collapsedWidth + collapsedInsideBorderSize + collapsedOutsideBorderSize,
   },
   right: {

@@ -5,7 +5,7 @@ const MoreIcon = (props: IconProps) => {
     <svg
       width="24px"
       height="24px"
-      viewBox="0 0 24 24"
+      viewBox="0 -3 24 24"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       {...props}
@@ -18,7 +18,7 @@ const MoreIcon = (props: IconProps) => {
       <text
         x="50%"
         y="50%"
-        fontSize="8.75"
+        fontSize="8px"
         fontFamily="Arial, sans-serif"
         fontWeight="bold"
         fill="currentColor"

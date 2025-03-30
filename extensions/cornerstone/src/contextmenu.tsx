@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const ContextMenu = ({ commands, onClose, other }) => {
   // Function to handle button activation
   const handleButtonClick = (toolId) => {

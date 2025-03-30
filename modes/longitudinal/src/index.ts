@@ -92,7 +92,7 @@ function modeFactory({ modeConfiguration }) {
   // Function to check if multimonitor is specified in the URL
   const isMultimonitor = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('multimonitor') === 'true'; // e.g., ?multimonitor=true
+    return urlParams.has('multimonitor');
   };
 
   return {
@@ -176,7 +176,7 @@ function modeFactory({ modeConfiguration }) {
 
           // Conditionally add tracked.thumbnailList to rightPanels if multimonitor is true
           const rightPanels = isMultimonitor()
-            ? [...defaultRightPanels, tracked.thumbnailList]
+            ? [tracked.thumbnailList, ...defaultRightPanels]
             : defaultRightPanels;
 
           return {
@@ -185,7 +185,7 @@ function modeFactory({ modeConfiguration }) {
               leftPanels: [tracked.thumbnailList], // Original left panel configuration
               leftPanelResizable: true,
               rightPanels: rightPanels, // Dynamically adjusted right panels
-              rightPanelClosed: true,
+              rightPanelClosed: !isMultimonitor(),
               rightPanelResizable: true,
               viewports: [
                 {

@@ -12,8 +12,6 @@ import {
 
 import NavBar from '../NavBar';
 
-// Todo: we should move this component to composition and remove props base
-
 interface HeaderProps {
   children?: ReactNode;
   menuOptions: Array<{
@@ -44,6 +42,11 @@ function Header({
 }: HeaderProps): ReactNode {
   const { t } = useTranslation('Header');
 
+  // Check if URL contains 'multimonitor'
+  const url = new URL(window.location.href);
+  const isMultiMonitor = url.searchParams.has('multimonitor');
+  const centerPosition = isMultiMonitor ? 'left-[15%]' : 'left-[50%] -translate-x-1/2';
+
   const onClickReturn = () => {
     if (isReturnEnabled && onClickReturnButton) {
       onClickReturnButton();
@@ -55,7 +58,7 @@ function Header({
       isSticky={isSticky}
       {...props}
     >
-      <div className="relative h-[48px] items-center">
+      <div className="relative h-[62px] items-center">
         <div className="absolute left-0 top-1/2 flex -translate-y-1/2 items-center">
           <div
             className={classNames(
@@ -71,10 +74,15 @@ function Header({
             </div>
           </div>
         </div>
-        <div className="absolute top-1/2 left-[250px] h-8 -translate-y-1/2">{Secondary}</div>
-        <div className="absolute  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+        {/* <div className="absolute top-1/2 left-[250px] h-8 -translate-y-1/2">{Secondary}</div> */}
+        <div className={`absolute ${centerPosition} top-1/2 -translate-y-1/2 transform`}>
           <div className="flex items-center justify-center space-x-2">{children}</div>
         </div>
+        {isMultiMonitor && (
+          <div className="absolute right-[15%] top-1/2 -translate-y-1/2 transform">
+            <div className="flex items-center justify-center space-x-2">{children}</div>
+          </div>
+        )}
         <div className="absolute right-0 top-1/2 flex -translate-y-1/2 select-none items-center">
           {PatientInfo}
           <div className="border-primary-dark mx-1.5 h-[25px] border-r"></div>
