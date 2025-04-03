@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import {
@@ -29,7 +29,7 @@ interface HeaderProps {
   Secondary?: ReactNode;
 }
 
-function Header({
+const Header: React.FC<HeaderProps> = ({
   children,
   menuOptions,
   isReturnEnabled = true,
@@ -39,12 +39,39 @@ function Header({
   PatientInfo,
   Secondary,
   ...props
-}: HeaderProps): ReactNode {
+}) => {
   const { t } = useTranslation('Header');
 
-  // Check if URL contains 'multimonitor'
-  const url = new URL(window.location.href);
-  const isMultiMonitor = url.searchParams.has('multimonitor');
+  // State to track if multiple monitors exist
+  const [isMultiMonitor, setIsMultiMonitor] = useState(false);
+
+  useEffect(() => {
+    // Function to check multiple monitors using getScreenDetails()
+    const checkMultiMonitor = async () => {
+      if ('getScreenDetails' in window) {
+        try {
+          // Get screen details
+          const screenDetails = await (window as any).getScreenDetails();
+
+          // If more than one screen is available, set isMultiMonitor to true
+          setIsMultiMonitor(screenDetails.screens.length > 1);
+        } catch (error) {
+          console.error('Error getting screen details:', error);
+          setIsMultiMonitor(false);
+        }
+      } else {
+        console.warn('getScreenDetails API is not supported in this browser.');
+        setIsMultiMonitor(false);
+      }
+    };
+
+    // Run check on mount
+    checkMultiMonitor();
+
+    return () => {};
+  }, []);
+
+  // Adjust position based on multi-monitor setup
   const centerPosition = isMultiMonitor ? 'left-[15%]' : 'left-[50%] -translate-x-1/2';
 
   const onClickReturn = () => {
@@ -68,13 +95,11 @@ function Header({
             onClick={onClickReturn}
             data-cy="return-to-work-list"
           >
-            {/* {isReturnEnabled && <Icons.ArrowLeft className="text-primary-active w-8" />} */}
             <div className="ml-1">
               {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Icons.OHIFLogo />}
             </div>
           </div>
         </div>
-        {/* <div className="absolute top-1/2 left-[250px] h-8 -translate-y-1/2">{Secondary}</div> */}
         <div className={`absolute ${centerPosition} top-1/2 -translate-y-1/2 transform`}>
           <div className="flex items-center justify-center space-x-2">{children}</div>
         </div>
@@ -124,6 +149,6 @@ function Header({
       </div>
     </NavBar>
   );
-}
+};
 
 export default Header;

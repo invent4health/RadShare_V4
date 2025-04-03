@@ -14,7 +14,7 @@ import {
   annotation,
 } from '@cornerstonejs/tools';
 import * as cornerstoneTools from '@cornerstonejs/tools';
-
+import { createRoot } from 'react-dom/client';
 import { Types as OhifTypes, utils } from '@ohif/core';
 import i18n from '@ohif/i18n';
 import {
@@ -31,17 +31,20 @@ import toggleVOISliceSync from './utils/toggleVOISliceSync';
 import { usePositionPresentationStore, useSegmentationPresentationStore } from './stores';
 import { toolNames } from './initCornerstoneTools';
 import CornerstoneViewportDownloadForm from './utils/CornerstoneViewportDownloadForm';
-import contextmenu from './contextmenu';
+import ContextMenu from './contextmenu';
 //
+import React from 'react';
+import ReactDOM from 'react-dom';
 import getCornerstoneBlendMode from './utils/getCornerstoneBlendMode';
 import Report from './Report';
 import { DicomMetadataStore } from '@ohif/core';
+import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
 const { DefaultHistoryMemo } = csUtils.HistoryMemo;
 const toggleSyncFunctions = {
   imageSlice: toggleImageSliceSync,
   voi: toggleVOISliceSync,
 };
-
+let currentMenuContainer: HTMLDivElement | null = null;
 function commandsModule({
   servicesManager,
   extensionManager,
@@ -197,6 +200,9 @@ function commandsModule({
     //     }
     //   }
     // },
+
+    // Adjust the import path to your contextMenu file
+
     showCornerstoneContextMenu: options => {
       const services = servicesManager.services;
       const element = _getActiveViewportEnabledElement()?.viewport?.element;
@@ -234,21 +240,95 @@ function commandsModule({
 
         commandsManager.run(options, optionsToUse);
       } else {
-        const { uiModalService } = servicesManager.services;
+        if (event) {
+          const t = event.detail.currentPoints.client;
+          const X = t[0];
+          const Y = t[1];
 
-        if (uiModalService && event) {
-          uiModalService.show({
-            content: contextmenu,
-            contentProps: {
-              commands: commandsManager,
-              onClose: () => uiModalService.hide(),
-              other: servicesManager.services.toolbarService,
-            },
-          });
+          // If the menu already exists, update its position
+          if (currentMenuContainer) {
+            currentMenuContainer.style.left = `${X}px`;
+            currentMenuContainer.style.top = `${Y}px`;
+            return;
+          }
+
+          // Create a new container for the menu
+          const menuContainer = document.createElement('div');
+          document.body.appendChild(menuContainer);
+          currentMenuContainer = menuContainer;
+
+          const handleClose = () => {
+            if (currentMenuContainer) {
+              root.unmount();
+              currentMenuContainer.remove();
+              currentMenuContainer = null;
+            }
+          };
+
+          // Use createRoot instead of ReactDOM.render
+          const root = ReactDOM.createRoot(menuContainer);
+          root.render(
+            <ContextMenu
+              commands={commandsManager}
+              other={servicesManager.services.toolbarService}
+              onClose={handleClose}
+              position={{ x: X, y: Y }}
+            />
+          );
+
+          const closeOnClickOutside = e => {
+            if (currentMenuContainer && !currentMenuContainer.contains(e.target)) {
+              handleClose();
+              document.removeEventListener('click', closeOnClickOutside);
+            }
+          };
+          setTimeout(() => {
+            document.addEventListener('click', closeOnClickOutside);
+          }, 0);
         }
       }
     },
 
+    copyImageToClipboard: async () => {
+      try {
+        const enabledElement = _getActiveViewportEnabledElement();
+        if (!enabledElement) {
+          uiNotificationService.show({
+            title: 'Copy Failed',
+            message: 'No active viewport found',
+            type: 'error',
+          });
+          return;
+        }
+
+        const { viewport } = enabledElement;
+        const canvas = viewport.getCanvas();
+
+        // Convert canvas to blob
+        const blob = await new Promise(resolve => {
+          canvas.toBlob(resolve, 'image/png');
+        });
+
+        // Create clipboard item
+        const clipboardItem = new ClipboardItem({ 'image/png': blob });
+
+        // Write to clipboard
+        await navigator.clipboard.write([clipboardItem]);
+
+        uiNotificationService.show({
+          title: 'Success',
+          message: 'Image copied to clipboard',
+          type: 'success',
+        });
+      } catch (error) {
+        console.error('Error copying image to clipboard:', error);
+        uiNotificationService.show({
+          title: 'Copy Failed',
+          message: 'Failed to copy image to clipboard',
+          type: 'error',
+        });
+      }
+    },
     // activateToolById: ({ itemId, toolGroupId }) => {
     //   const { viewports } = viewportGridService.getState();
 
@@ -1967,6 +2047,9 @@ function commandsModule({
     },
     activateToolById: {
       commandFn: actions.activateToolById,
+    },
+    copyImageToClipboard: {
+      commandFn: actions.copyImageToClipboard,
     },
     // activateReportpanel: {
     //   commandFn: actions.activateReportpanel,

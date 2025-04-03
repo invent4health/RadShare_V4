@@ -11,6 +11,7 @@ export interface ModalProps {
   shouldCloseOnEsc?: boolean;
   shouldCloseOnOverlayClick?: boolean;
   containerClassName?: string;
+  // Add optional position prop
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -21,6 +22,7 @@ const Modal: React.FC<ModalProps> = ({
   shouldCloseOnEsc = true,
   shouldCloseOnOverlayClick = true,
   containerClassName,
+// Destructure the new position prop
 }) => {
   return (
     <Dialog
@@ -28,6 +30,7 @@ const Modal: React.FC<ModalProps> = ({
       onOpenChange={open => !open && onClose()}
       shouldCloseOnEsc={shouldCloseOnEsc}
       shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
+     // Optionally disable overlay when positioned
     >
       <DialogContent className={containerClassName}>
         {title && (

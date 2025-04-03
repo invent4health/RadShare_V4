@@ -23,6 +23,7 @@ interface DialogRootProps extends DialogPrimitive.DialogProps {
   shouldCloseOnEsc?: boolean;
   shouldCloseOnOverlayClick?: boolean;
   showOverlay?: boolean;
+  className?: string;
 }
 
 const Dialog = ({
@@ -30,12 +31,13 @@ const Dialog = ({
   shouldCloseOnEsc = true,
   shouldCloseOnOverlayClick = true,
   showOverlay = true,
+  className,
   ...props
 }: DialogRootProps) => (
   <DialogContext.Provider
     value={{ isDraggable, shouldCloseOnEsc, shouldCloseOnOverlayClick, showOverlay }}
   >
-    <DialogPrimitive.Root {...props} />
+    <DialogPrimitive.Root className={cn(className)} {...props} />
   </DialogContext.Provider>
 );
 
@@ -81,8 +83,6 @@ const DialogContent = React.forwardRef<
     ref
   );
 
-  // When not isDraggable, Tailwind centers the dialog.
-  // When isDraggable, we remove the built‑in centering so our inline transform takes over.
   const contentClassName = cn(
     'max-w-[fit-content] w-full bg-muted data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid gap-4 p-4 shadow-lg duration-200 sm:rounded-lg',
     !isDraggable ? 'translate-x-[-50%] translate-y-[-50%]' : '',

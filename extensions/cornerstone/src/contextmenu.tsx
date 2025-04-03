@@ -1,9 +1,9 @@
 import React from 'react';
+import { ContextMenu } from '@ohif/ui';
 
-
-const ContextMenu = ({ commands, onClose, other }) => {
+const contextMenu = ({ commands, other, onClose, position }) => {
   // Function to handle button activation
-  const handleButtonClick = (toolId) => {
+  const handleButtonClick = toolId => {
     try {
       let runWarning = false;
 
@@ -23,6 +23,7 @@ const ContextMenu = ({ commands, onClose, other }) => {
       }
 
       // Close the menu
+      console.log(other);
       onClose();
 
       console.log(`Activated tool: ${toolId}, Warning: ${runWarning}`);
@@ -43,10 +44,14 @@ const ContextMenu = ({ commands, onClose, other }) => {
     'EllipticalROI',
     'RectangleROI',
     'PlanarFreehandROI',
+    'Copy Image'
   ];
 
   return (
-    <div className="context-menu w-[fit-content]">
+    <div
+      className="context-menu bg-muted w-[fit-content]"
+      style={{ top: `${position.y}px`, left: `${position.x}px`, position: 'absolute' }}
+    >
       <ul
         style={{
           listStyle: 'none',
@@ -55,7 +60,7 @@ const ContextMenu = ({ commands, onClose, other }) => {
           width: '120px', // Adjusted width for better readability
         }}
       >
-        {toolOptions.map((toolId) => (
+        {toolOptions.map(toolId => (
           <li
             key={toolId}
             style={{
@@ -86,4 +91,4 @@ const ContextMenu = ({ commands, onClose, other }) => {
   );
 };
 
-export default ContextMenu;
+export default contextMenu;

@@ -17,6 +17,17 @@ export default {
           },
         ],
       },
+      {
+        id: 'myCustomMenu',
+        selector: ({ nearbyToolData }) => !!nearbyToolData,
+        items: [
+          {
+            label: 'Test Button',
+            commands: [{ commandName: 'testCommand' }],
+          },
+        ],
+      },
+
     ],
   },
 };

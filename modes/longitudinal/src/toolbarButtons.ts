@@ -345,6 +345,19 @@ const toolbarButtons: Button[] = [
     },
   },
   {
+    id: 'Copy Image',
+    uiType: 'ohif.toolButton',
+    props: {
+      type: 'tool',
+      icon: 'prev-arrow',
+      label: 'Undo',
+      commands: {
+        commandName: 'copyImageToClipboard',
+      },
+      evaluate: 'evaluate.action',
+    },
+  },
+  {
     id: 'Redo',
     uiType: 'ohif.toolButton',
     props: {

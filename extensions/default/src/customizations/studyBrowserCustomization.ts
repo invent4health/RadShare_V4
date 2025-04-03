@@ -43,5 +43,5 @@ export default {
       selected: true,
     },
   ],
-  'studyBrowser.studyMode': 'all',
+  'studyBrowser.studyMode': 'recent',
 };

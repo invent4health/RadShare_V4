@@ -132,6 +132,8 @@ const CornerstoneViewportDownloadForm = ({
     }
   };
 
+ 
+
   const handleToggleAnnotations = (show: boolean) => {
     const activeViewportEnabledElement = getEnabledElement(activeViewportElement);
     if (!activeViewportEnabledElement) {

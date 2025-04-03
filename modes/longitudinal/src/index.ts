@@ -5,6 +5,7 @@ import initToolGroups from './initToolGroups';
 import toolbarButtons from './toolbarButtons';
 import moreTools from './moreTools';
 import imgMode from './imgMode';
+import WindowLevelPreset from './windowLevelPreset';
 
 // Allow this mode by excluding non-imaging modalities such as SR, SEG
 // Also, SM is not a simple imaging modalities, so exclude it.
@@ -105,10 +106,16 @@ function modeFactory({ modeConfiguration }) {
       measurementService.clearMeasurements();
       initToolGroups(extensionManager, toolGroupService, commandsManager);
 
-      toolbarService.addButtons([...toolbarButtons, ...moreTools, ...imgMode]);
+      toolbarService.addButtons([
+        ...toolbarButtons,
+        ...moreTools,
+        ...imgMode,
+        ...WindowLevelPreset,
+      ]);
       toolbarService.createButtonSection('primary', [
         'MoreTools',
         'StackScroll',
+        'WindowLevelPreset',
         'MeasurementTools',
         'Zoom',
         'Pan',
@@ -247,4 +254,4 @@ const mode = {
 };
 
 export default mode;
-export { initToolGroups, moreTools, toolbarButtons, imgMode };
+export { initToolGroups, moreTools, toolbarButtons, imgMode, WindowLevelPreset };
