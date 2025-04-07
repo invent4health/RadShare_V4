@@ -6,14 +6,9 @@ window.config = {
   // whiteLabeling: {},
   extensions: [],
   modes: [],
-  customizationService: {
-    'viewportActionMenu.windowLevelActionMenu': {
-      $merge: {
-        location: 0,
-      },
-    },
-  },
+  customizationService: {},
   showStudyList: true,
+
   // some windows systems have issues with more than 3 web workers
   maxNumberOfWebWorkers: 3,
   // below flag is for performance reasons, but it might not work for all servers
@@ -29,8 +24,9 @@ window.config = {
     thumbnail: 75,
     // Prefetch number is dependent on the http protocol. For http 2 or
     // above, the number of requests can be go a lot higher.
-    prefetch: 25,
+    prefetch: 10,
   },
+
   // filterQueryParam: false,
   // Defines multi-monitor layouts
   multimonitor: [
@@ -157,9 +153,6 @@ window.config = {
   httpErrorHandler: error => {
     // This is 429 when rejected from the public idc sandbox too often.
     console.warn(error.status);
-
-    // Could use services manager here to bring up a dialog/modal if needed.
-    console.warn('test, navigate to https://ohif.org/');
   },
   // whiteLabeling: {
   //   /* Optional: Should return a React component to be rendered in the "Logo" section of the application's Top Navigation bar */

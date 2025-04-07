@@ -45,23 +45,34 @@ const Header: React.FC<HeaderProps> = ({
   // State to track if multiple monitors exist
   const [isMultiMonitor, setIsMultiMonitor] = useState(false);
 
+  const isMultimonitorParam = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has('multimonitor');
+  };
+
   useEffect(() => {
     // Function to check multiple monitors using getScreenDetails()
     const checkMultiMonitor = async () => {
-      if ('getScreenDetails' in window) {
-        try {
-          // Get screen details
-          const screenDetails = await (window as any).getScreenDetails();
-
-          // If more than one screen is available, set isMultiMonitor to true
-          setIsMultiMonitor(screenDetails.screens.length > 1);
-        } catch (error) {
-          console.error('Error getting screen details:', error);
-          setIsMultiMonitor(false);
-        }
+      if (isMultimonitorParam()) {
+        setIsMultiMonitor(isMultimonitorParam());
       } else {
-        console.warn('getScreenDetails API is not supported in this browser.');
-        setIsMultiMonitor(false);
+        if ('getScreenDetails' in window) {
+          try {
+            // Get screen details
+            const screenDetails = await (window as any).getScreenDetails();
+
+            // Set isMultiMonitor based on screen count
+            setIsMultiMonitor(screenDetails.screens.length > 1);
+          } catch (error) {
+            console.error('Error getting screen details:', error);
+
+            // If blocked or failed, check the 'multimonitor' parameter
+          }
+        } else {
+          console.warn('getScreenDetails API is not supported in this browser.');
+
+          // If API is not available, check the 'multimonitor' parameter
+        }
       }
     };
 

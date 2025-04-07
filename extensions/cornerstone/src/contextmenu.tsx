@@ -23,7 +23,7 @@ const contextMenu = ({ commands, other, onClose, position }) => {
       }
 
       // Close the menu
-      console.log(other);
+      // console.log(other);
       onClose();
 
       console.log(`Activated tool: ${toolId}, Warning: ${runWarning}`);
@@ -44,7 +44,8 @@ const contextMenu = ({ commands, other, onClose, position }) => {
     'EllipticalROI',
     'RectangleROI',
     'PlanarFreehandROI',
-    'Copy Image'
+    'Copy Image',
+    'WindowLevel',
   ];
 
   return (

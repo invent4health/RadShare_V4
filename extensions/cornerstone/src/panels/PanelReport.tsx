@@ -45,7 +45,7 @@ export default function PanelReport(props) {
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
-    console.log('Active ho gya hai');
+    
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);

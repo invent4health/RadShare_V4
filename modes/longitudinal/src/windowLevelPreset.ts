@@ -8,7 +8,7 @@ function _createWwwcPreset(preset, title, subtitle) {
   return createButton({
     id: `Preset_${preset}`,
     icon: 'tool-window-level',
-    label: title, // This will now be displayed in the menu
+    label: title,
     commands: {
       commandName: 'setWindowLevel',
       commandOptions: { ...windowLevelPresets[preset] },
@@ -18,7 +18,7 @@ function _createWwwcPreset(preset, title, subtitle) {
   });
 }
 
-// New WindowLevelPreset configuration
+// Updated WindowLevelPreset configuration with Auto option and evaluate
 const WindowLevelPreset = [
   {
     id: 'WindowLevelPreset',
@@ -35,7 +35,13 @@ const WindowLevelPreset = [
           commandOptions: { toolName: 'WindowLevelPreset' },
           context: 'CORNERSTONE',
         },
-        evaluate: 'evaluate.action',
+        evaluate: [
+          'evaluate.cornerstoneTool',
+          {
+            name: 'evaluate.viewport.supported',
+            unsupportedViewportTypes: ['wholeSlide'],
+          },
+        ], // Added evaluate block here
       }),
       secondary: {
         icon: 'chevron-down',
@@ -43,6 +49,13 @@ const WindowLevelPreset = [
         tooltip: 'W/L Presets',
       },
       items: [
+        createButton({
+          id: 'Preset_Auto',
+          icon: 'tool-window-level',
+          label: 'Auto',
+          commands: 'resetViewport',
+          evaluate: 'evaluate.action',
+        }),
         _createWwwcPreset(1, 'Soft Tissue', '400 / 40'),
         _createWwwcPreset(2, 'Lung', '1500 / -600'),
         _createWwwcPreset(3, 'Liver', '150 / 90'),

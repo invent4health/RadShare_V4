@@ -213,6 +213,7 @@ const Thumbnail = ({
             id={`display-set-tooltip-${displaySetInstanceUID}`}
           />
           {isTracked && (
+
             <Tooltip>
               <TooltipTrigger>
                 <div className="group">
