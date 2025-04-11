@@ -15,7 +15,12 @@ export default {
             label: 'Add Label',
             commands: 'setMeasurementLabel',
           },
+          // {
+          //   label: 'Send to Report',
+          //   commands: [{ commandName: 'testCommand' }],
+          // },
         ],
+
       },
       {
         id: 'myCustomMenu',

@@ -43,7 +43,7 @@ export default {
       selected: true,
     },
   ],
-  'studyBrowser.studyMode': 'recent',
+  'studyBrowser.studyMode': 'all',
   'studyBrowser.thumbnailDoubleClickCallback': {
     callbacks: [
       ({ activeViewportId, servicesManager, isHangingProtocolLayout }) =>

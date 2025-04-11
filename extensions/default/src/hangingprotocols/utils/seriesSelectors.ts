@@ -4,11 +4,11 @@ type MatchingRule = Types.HangingProtocol.MatchingRule;
 
 export const seriesWithImages: MatchingRule[] = [
   {
-    attribute: 'numImageFrames',
+    attribute: 'NumberOfStudyRelatedSeries',
     constraint: {
-      greaterThan: { value: 0 },
+      equals: true,
     },
-    weight: 1,
+    weight: 10,
     required: true,
   },
   // This display set will select the specified items by preference

@@ -195,13 +195,13 @@ import type { IconProps } from '../types';
 
 export const OHIFLogo = (props: IconProps) => (
   <svg
-    width={300}
-    height={200}
-    viewBox="20 15 2000 1080"
+    width={250}
+    height={65}
+    viewBox="20 15 3500 1080"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-      <g transform="translate(25, 350)scale(0.45)">
+      <g transform="translate(-450, -150)scale(1.3)">
       <path
         fill="none"
         opacity={1}
@@ -227,13 +227,13 @@ export const OHIFLogo = (props: IconProps) => (
         d=" M331.966919,526.994629  C317.914032,477.919464 350.920074,432.573761 394.968933,425.788971  C436.422333,419.403992 474.923584,443.588379 485.143311,484.207703  C496.647583,529.932495 468.954987,574.363220 421.788635,582.530579  C380.134003,589.743591 343.903259,565.312805 331.966919,526.994629 z"
       />
     </g>
-    <g transform="translate(800, 300) scale(5)">
+    <g transform="translate(1200, 300) scale(5)">
     <text transform="matrix(1,0,0,1,-60,45)">
         <tspan
           x={0}
           y={30}
           style={{
-            fontSize: 50,
+            fontSize: 100,
             fill: '#FFF',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
@@ -243,7 +243,7 @@ export const OHIFLogo = (props: IconProps) => (
         <tspan
           y={30}
           style={{
-            fontSize: 35,
+            fontSize: 100,
             fill: '#ffffff',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
@@ -254,7 +254,7 @@ export const OHIFLogo = (props: IconProps) => (
         <tspan
           y={30}
           style={{
-            fontSize: 35,
+            fontSize: 100,
             fill: '#ffffff',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
@@ -265,7 +265,7 @@ export const OHIFLogo = (props: IconProps) => (
         <tspan
           y={30}
           style={{
-            fontSize: 50,
+            fontSize: 100,
             fill: '#ffffff',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
@@ -276,7 +276,7 @@ export const OHIFLogo = (props: IconProps) => (
         <tspan
           y={30}
           style={{
-            fontSize: 35,
+            fontSize: 100,
             fill: '#ffffff',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
@@ -287,7 +287,7 @@ export const OHIFLogo = (props: IconProps) => (
         <tspan
           y={30}
           style={{
-            fontSize: 35,
+            fontSize: 100,
             fill: '#ffffff',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
@@ -298,7 +298,7 @@ export const OHIFLogo = (props: IconProps) => (
         <tspan
           y={30}
           style={{
-            fontSize: 35,
+            fontSize: 100,
             fill: '#ffffff',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
@@ -309,13 +309,26 @@ export const OHIFLogo = (props: IconProps) => (
         <tspan
           y={30}
           style={{
-            fontSize: 35,
+            fontSize: 100,
             fill: '#ffffff',
             fontWeight: 700,
             fontFamily: "'Inter-Bold', 'Inter'",
           }}
         >
           E
+        </tspan>
+      </text>
+      <text transform="matrix(1,0,0,1,-60,-15) scale(0.3)">
+           <tspan
+          y={400}
+          style={{
+            fontSize: 100,
+            fill: '#ffffff',
+            fontWeight: 700,
+            fontFamily: "'Inter-Bold', 'Inter'",
+          }}
+        >
+        REVOLUTIONIZING RADIOLOGY
         </tspan>
       </text>
     </g>

@@ -3,6 +3,7 @@ import hpMNCompare from './hangingprotocols/hpCompare';
 import hpMammography from './hangingprotocols/hpMammo';
 import hpScale from './hangingprotocols/hpScale';
 
+
 const defaultProtocol = {
   id: 'default',
   locked: true,

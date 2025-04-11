@@ -293,7 +293,7 @@ const toolbarButtons: Button[] = [
     id: 'Layout',
     uiType: 'ohif.layoutSelector',
     props: {
-      rows: 3,
+      rows: 2,
       columns: 4,
       evaluate: 'evaluate.action',
     },

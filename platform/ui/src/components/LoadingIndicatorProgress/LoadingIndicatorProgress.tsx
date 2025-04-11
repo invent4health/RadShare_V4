@@ -2,6 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import ProgressLoadingBar from '../ProgressLoadingBar';
+import LoadingIndicatorTotalPercent from '../LoadingIndicatorTotalPercent';
 import { Icons } from '@ohif/ui-next';
 /**
  *  A React component that renders a loading indicator.
@@ -19,7 +20,7 @@ function LoadingIndicatorProgress({ className, textBlock, progress }) {
     >
       <Icons.LoadingOHIFMark className="h-12 w-12 text-white" />
       <div className="w-48">
-        <ProgressLoadingBar progress={progress} />
+      <ProgressLoadingBar progress={progress} />
       </div>
       {textBlock}
     </div>

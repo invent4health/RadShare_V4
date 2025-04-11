@@ -8,9 +8,15 @@ window.config = {
   modes: [],
   customizationService: {},
   showStudyList: true,
+  studyPrefetcher: {
+    enabled: true,
+    displaySetsCount: 25,
+    maxNumPrefetchRequests: 10,
+    order: 'closest',
+  },
 
   // some windows systems have issues with more than 3 web workers
-  maxNumberOfWebWorkers: 3,
+  maxNumberOfWebWorkers: 5,
   // below flag is for performance reasons, but it might not work for all servers
   showWarningMessageForCrossOrigin: true,
   showCPUFallbackMessage: true,
@@ -24,7 +30,7 @@ window.config = {
     thumbnail: 75,
     // Prefetch number is dependent on the http protocol. For http 2 or
     // above, the number of requests can be go a lot higher.
-    prefetch: 10,
+    prefetch: 25,
   },
 
   // filterQueryParam: false,

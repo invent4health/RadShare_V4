@@ -8,7 +8,7 @@ export const studyWithImages: MatchingRule[] = [
     weight: 25,
     attribute: 'numberOfDisplaySetsWithImages',
     constraint: {
-      greaterThan: 0,
+      equals: 'first',
     },
   },
 ];

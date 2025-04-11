@@ -83,9 +83,12 @@ const Thumbnail = ({
             <div className="absolute bottom-0 left-0 flex h-[14px] items-center gap-[4px] rounded-tr pt-[10px] pb-[8px] pr-[6px] pl-[3px]">
               <div
                 className={classnames(
-                  'h-[10px] w-[10px] rounded-[2px]',
-                  isActive || isHydratedForDerivedDisplaySet ? 'bg-highlight' : 'bg-primary/65',
-                  loadingProgress && loadingProgress < 1 && 'bg-primary/25'
+                  'h-[16px] w-[16px] rounded-full border-2 transition-all duration-400',
+                  loadingProgress < 1
+                    ? 'border-primary animate-spin border-dashed'
+                    : isActive || isHydratedForDerivedDisplaySet
+                      ? 'border-highlight'
+                      : 'border-primary/60'
                 )}
               ></div>
               <div className="text-[11px] font-semibold text-white">{modality}</div>
@@ -213,7 +216,6 @@ const Thumbnail = ({
             id={`display-set-tooltip-${displaySetInstanceUID}`}
           />
           {isTracked && (
-
             <Tooltip>
               <TooltipTrigger>
                 <div className="group">

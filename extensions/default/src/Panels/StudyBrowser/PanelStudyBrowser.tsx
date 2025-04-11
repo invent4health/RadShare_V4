@@ -22,8 +22,13 @@ function PanelStudyBrowser({
   dataSource,
 }) {
   const { servicesManager, commandsManager } = useSystem();
-  const { hangingProtocolService, displaySetService, uiNotificationService, customizationService } =
-    servicesManager.services;
+  const {
+    hangingProtocolService,
+    displaySetService,
+    uiNotificationService,
+    customizationService,
+    studyPrefetcherService,
+  } = servicesManager.services;
   const navigate = useNavigate();
 
   // Normally you nest the components so the tree isn't so deep, and the data
@@ -37,6 +42,7 @@ function PanelStudyBrowser({
     ...StudyInstanceUIDs,
   ]);
   const [hasLoadedViewports, setHasLoadedViewports] = useState(false);
+  const [displaySetsLoadingState, setDisplaySetsLoadingState] = useState({});
   const [studyDisplayList, setStudyDisplayList] = useState([]);
   const [displaySets, setDisplaySets] = useState([]);
   const [thumbnailImageSrcMap, setThumbnailImageSrcMap] = useState({});
@@ -89,6 +95,22 @@ function PanelStudyBrowser({
   };
 
   // ~~ studyDisplayList
+  useEffect(() => {
+    const { unsubscribe } = studyPrefetcherService.subscribe(
+      studyPrefetcherService.EVENTS.DISPLAYSET_LOAD_PROGRESS,
+      updatedDisplaySetLoadingState => {
+        const { displaySetInstanceUID, loadingProgress } = updatedDisplaySetLoadingState;
+
+        setDisplaySetsLoadingState(prevState => ({
+          ...prevState,
+          [displaySetInstanceUID]: loadingProgress,
+        }));
+      }
+    );
+
+    return () => unsubscribe();
+  }, [studyPrefetcherService]);
+
   useEffect(() => {
     // Fetch all studies for the patient in each primary study
     async function fetchStudiesForPatient(StudyInstanceUID) {

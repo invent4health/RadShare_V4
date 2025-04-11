@@ -6,9 +6,20 @@ import { only3D } from './hps/only3D';
 import { primary3D } from './hps/primary3D';
 import { primaryAxial } from './hps/primaryAxial';
 import { frameView } from './hps/frameView';
+import { frame } from './hps/frame';
 
 function getHangingProtocolModule() {
-  return [
+  const isMultiMonitor = window?.location?.href?.includes('multimonitor');
+
+  const protocols = [
+    !isMultiMonitor && {
+      name: mpr.id,
+      protocol: mpr,
+    },
+    {
+      name: frame.id,
+      protocol: frame,
+    },
     {
       name: mprAnd3DVolumeViewport.id,
       protocol: mprAnd3DVolumeViewport,
@@ -38,6 +49,9 @@ function getHangingProtocolModule() {
       protocol: frameView,
     },
   ];
+
+  // Remove any false/null entries (e.g., if mpr is excluded)
+  return protocols.filter(Boolean);
 }
 
 export default getHangingProtocolModule;

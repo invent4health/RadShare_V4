@@ -34,6 +34,7 @@ export default {
       if (!viewportId) {
         return [];
       }
+
       const displaySetInsaneUIDs = viewportGridService.getDisplaySetsUIDsForViewport(viewportId);
 
       if (!displaySetInsaneUIDs) {
@@ -66,34 +67,43 @@ export default {
 
     return generateAdvancedPresets({ servicesManager });
   },
-  'layoutSelector.commonPresets': [
-    {
-      icon: 'layout-common-1x1',
-      commandOptions: {
-        numRows: 1,
-        numCols: 1,
+
+  'layoutSelector.commonPresets': (() => {
+    const isMultiMonitor = window?.location?.href?.includes('multimonitor');
+
+    const presets = [
+      {
+        icon: 'layout-common-1x1',
+        commandOptions: {
+          numRows: 1,
+          numCols: 1,
+        },
       },
-    },
-    {
-      icon: 'layout-common-1x2',
-      commandOptions: {
-        numRows: 1,
-        numCols: 2,
+      {
+        icon: 'layout-common-1x2',
+        commandOptions: {
+          numRows: 1,
+          numCols: 2,
+        },
       },
-    },
-    {
-      icon: 'layout-common-2x2',
-      commandOptions: {
-        numRows: 2,
-        numCols: 2,
+      {
+        icon: 'layout-common-2x2',
+        commandOptions: {
+          numRows: 2,
+          numCols: 2,
+        },
       },
-    },
-    {
-      icon: 'layout-common-2x3',
-      commandOptions: {
-        numRows: 2,
-        numCols: 3,
+      {
+        icon: 'layout-common-2x3',
+        commandOptions: {
+          numRows: 2,
+          numCols: 3,
+        },
       },
-    },
-  ],
+    ];
+
+    return isMultiMonitor
+      ? presets.filter(p => !(p.commandOptions.numRows === 2 && p.commandOptions.numCols === 3))
+      : presets;
+  })(),
 };
