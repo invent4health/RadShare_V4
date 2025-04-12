@@ -131,6 +131,7 @@ import {
   ToolSegmentAnything,
   ToolContract,
   ToolExpand,
+  ToolWindowLevelNew
 } from './Sources/Tools';
 import ActionNewDialog from './Sources/ActionNewDialog';
 import NotificationInfo from './Sources/NotificationInfo';
@@ -579,6 +580,7 @@ export const Icons = {
   NextIcon,
   MoreIcon,
   DottedCircle,
+  ToolWindowLevelNew,
   //
   //
   //
@@ -680,6 +682,7 @@ export const Icons = {
   'toggle-dicom-overlay': (props: IconProps) => ToolToggleDicomOverlay(props),
   'tool-ultrasound-bidirectional': (props: IconProps) => ToolUltrasoundBidirectional(props),
   'tool-window-level': (props: IconProps) => ToolWindowLevel(props),
+  'tool-window-level-new': (props: IconProps) => ToolWindowLevelNew(props),
   'tool-window-region': (props: IconProps) => ToolWindowRegion(props),
   'icon-tool-window-region': (props: IconProps) => ToolWindowRegion(props),
   'icon-tool-ultrasound-bidirectional': (props: IconProps) => ToolUltrasoundBidirectional(props),

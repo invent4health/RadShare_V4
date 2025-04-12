@@ -113,12 +113,13 @@ function modeFactory({ modeConfiguration }) {
         ...WindowLevelPreset,
       ]);
       toolbarService.createButtonSection('primary', [
-        'MoreTools',
-        'StackScroll',
-        'WindowLevelPreset',
-        'MeasurementTools',
         'Zoom',
         'Pan',
+        'WindowLevel',
+        'WindowLevelPreset',
+        'MoreTools',
+        'StackScroll',
+        'MeasurementTools',
         'TrackballRotate',
         'Capture',
         'Layout',

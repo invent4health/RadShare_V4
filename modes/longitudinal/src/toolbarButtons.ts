@@ -235,7 +235,7 @@ const toolbarButtons: Button[] = [
     id: 'WindowLevel',
     uiType: 'ohif.toolButton',
     props: {
-      icon: 'tool-window-level',
+      icon: 'tool-window-level-new',
       label: 'Window Level',
       commands: setToolActiveToolbar,
       evaluate: [
