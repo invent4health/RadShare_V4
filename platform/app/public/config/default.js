@@ -16,7 +16,7 @@ window.config = {
   },
 
   // some windows systems have issues with more than 3 web workers
-  maxNumberOfWebWorkers: 5,
+  maxNumberOfWebWorkers: 3,
   // below flag is for performance reasons, but it might not work for all servers
   showWarningMessageForCrossOrigin: true,
   showCPUFallbackMessage: true,
@@ -113,15 +113,15 @@ window.config = {
       configuration: {
         friendlyName: 'DCM4CHEE Server',
         name: 'RADSHARE',
-        wadoUriRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/wado',
-        qidoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
-        wadoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
+        // wadoUriRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/wado',
+        // qidoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
+        // wadoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
         // wadoUriRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/wado',
         // qidoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
         // wadoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
-        // wadoUriRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/wado',
-        // qidoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
-        // wadoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
+        wadoUriRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/wado',
+        qidoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
+        wadoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
         qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         enableStudyLazyLoad: true,

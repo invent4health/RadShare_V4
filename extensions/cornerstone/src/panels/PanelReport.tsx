@@ -45,18 +45,18 @@ export default function PanelReport(props) {
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
+ 
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [isEdited, isSaved]);
 
-
   useEffect(() => {
     localStorage.setItem('isEdited', JSON.stringify(isEdited));
     localStorage.setItem('isSaved', JSON.stringify(isSaved));
-  }, [isEdited, isSaved]);  // Only include state variables in dependencies
+  }, [isEdited, isSaved]); // Only include state variables in dependencies
 
   useEffect(() => {
     fetchDicomMetadata(); // Fetch StudyUID when the component mounts
@@ -272,7 +272,7 @@ export default function PanelReport(props) {
               <span className="info-value">{patientDetails.patientID}</span>
               <span className="info-value">{patientDetails.patientAge}</span>
             </div>
-            </div>
+          </div>
         </div>
         <div className="template-dropdown white">
           <label

@@ -289,7 +289,50 @@ function commandsModule({
       }
     },
 
+    // copyImageToClipboard: async () => {
+    //   try {
+    //     const enabledElement = _getActiveViewportEnabledElement();
+    //     if (!enabledElement) {
+    //       uiNotificationService.show({
+    //         title: 'Copy Failed',
+    //         message: 'No active viewport found',
+    //         type: 'error',
+    //       });
+    //       return;
+    //     }
+
+    //     const { viewport } = enabledElement;
+    //     const canvas = viewport.getCanvas();
+
+    //     // Convert canvas to blob
+    //     const blob = await new Promise(resolve => {
+    //       canvas.toBlob(resolve, 'image/png');
+    //     });
+
+    //     // Create clipboard item
+    //     const clipboardItem = new ClipboardItem({ 'image/png': blob });
+
+    //     // Write to clipboard
+    //     await navigator.clipboard.write([clipboardItem]);
+
+    //     uiNotificationService.show({
+    //       title: 'Success',
+    //       message: 'Image copied to clipboard',
+    //       type: 'success',
+    //     });
+    //   } catch (error) {
+    //     console.error('Error copying image to clipboard:', error);
+    //     uiNotificationService.show({
+    //       title: 'Copy Failed',
+    //       message: 'Failed to copy image to clipboard',
+    //       type: 'error',
+    //     });
+    //   }
+    // },
+
     copyImageToClipboard: async () => {
+      const { uiNotificationService } = servicesManager.services;
+
       try {
         const enabledElement = _getActiveViewportEnabledElement();
         if (!enabledElement) {
@@ -309,17 +352,61 @@ function commandsModule({
           canvas.toBlob(resolve, 'image/png');
         });
 
-        // Create clipboard item
-        const clipboardItem = new ClipboardItem({ 'image/png': blob });
+        // Modern Clipboard API (preferred)
+        if (typeof ClipboardItem !== 'undefined' && navigator.clipboard) {
+          try {
+            const clipboardItem = new ClipboardItem({ 'image/png': blob });
+            await navigator.clipboard.write([clipboardItem]);
+            uiNotificationService.show({
+              title: 'Success',
+              message: 'Image copied to clipboard',
+              type: 'success',
+            });
+            return;
+          } catch (error) {
+            console.error('Modern clipboard API failed:', error);
+            // Fall through to fallback
+          }
+        }
 
-        // Write to clipboard
-        await navigator.clipboard.write([clipboardItem]);
+        // Fallback for older browsers
+        console.warn('Falling back to legacy clipboard copy method');
+        const dataUrl = canvas.toDataURL('image/png');
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.style.position = 'absolute';
+        img.style.opacity = '0';
+        document.body.appendChild(img);
 
-        uiNotificationService.show({
-          title: 'Success',
-          message: 'Image copied to clipboard',
-          type: 'success',
-        });
+        const range = document.createRange();
+        range.selectNode(img);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+
+        try {
+          const success = document.execCommand('copy');
+          document.body.removeChild(img);
+          window.getSelection().removeAllRanges();
+
+          if (success) {
+            uiNotificationService.show({
+              title: 'Success',
+              message: 'Image copied to clipboard (legacy method)',
+              type: 'success',
+            });
+          } else {
+            throw new Error('Legacy copy command failed');
+          }
+        } catch (error) {
+          document.body.removeChild(img);
+          window.getSelection().removeAllRanges();
+          console.error('Legacy clipboard copy failed:', error);
+          uiNotificationService.show({
+            title: 'Copy Failed',
+            message: 'Failed to copy image to clipboard',
+            type: 'error',
+          });
+        }
       } catch (error) {
         console.error('Error copying image to clipboard:', error);
         uiNotificationService.show({
@@ -329,6 +416,12 @@ function commandsModule({
         });
       }
     },
+
+
+
+
+
+
     // activateToolById: ({ itemId, toolGroupId }) => {
     //   const { viewports } = viewportGridService.getState();
 

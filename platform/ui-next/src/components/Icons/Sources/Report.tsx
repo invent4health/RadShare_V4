@@ -3,37 +3,60 @@ import type { IconProps } from '../types';
 
 export const Report = (props: IconProps) => (
   <svg
+    width="28"
+    height="28"
+    viewBox="0 0 32 32"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 28 28"
-    fill="Black"
-    {...props}
   >
-    {/* Document Shape */}
-    <path d="M7 2h10l5 5v17a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
-    {/* Report Lines */}
-    <line
-      x1="9"
-      y1="9"
-      x2="19"
-      y2="9"
-      stroke="white"
+    <rect
+      x="0"
+      y="0"
+      width="32"
+      height="32"
+      fill="#000000"
+    />
+
+    <rect
+      x="6"
+      y="4"
+      width="20"
+      height="24"
+      rx="2"
+      fill="#FFFFFF"
+      stroke="#FFFFFF"
       strokeWidth="2"
     />
+
     <line
-      x1="9"
-      y1="13"
-      x2="19"
-      y2="13"
-      stroke="white"
-      strokeWidth="2"
+      x1="8"
+      y1="8"
+      x2="24"
+      y2="8"
+      stroke="#000000"
+      strokeWidth="1"
     />
     <line
-      x1="9"
-      y1="17"
-      x2="15"
-      y2="17"
-      stroke="white"
-      strokeWidth="2"
+      x1="8"
+      y1="12"
+      x2="24"
+      y2="12"
+      stroke="#000000"
+      strokeWidth="1"
+    />
+    <line
+      x1="8"
+      y1="16"
+      x2="18"
+      y2="16"
+      stroke="#000000"
+      strokeWidth="1"
+    />
+
+    <path
+      d="M24 2 L28 6 L24 10"
+      fill="none"
+      stroke="#FFFFFF"
+      strokeWidth="1"
     />
   </svg>
 );

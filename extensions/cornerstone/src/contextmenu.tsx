@@ -36,6 +36,7 @@ const contextMenu = ({ commands, other, onClose, position }) => {
   const toolOptions = [
     'Zoom',
     'Pan',
+    'WindowLevel',
     'Length',
     'Rotate Right',
     'Reset View',
@@ -45,7 +46,6 @@ const contextMenu = ({ commands, other, onClose, position }) => {
     'RectangleROI',
     'PlanarFreehandROI',
     'Copy Image',
-    'WindowLevel',
   ];
 
   return (

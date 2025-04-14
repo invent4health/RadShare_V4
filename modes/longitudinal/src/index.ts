@@ -91,6 +91,8 @@ function modeFactory({ modeConfiguration }) {
   };
 
   // Function to check if multimonitor is specified in the URL
+ 
+
   const isMultimonitor = () => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.has('multimonitor');
@@ -176,9 +178,9 @@ function modeFactory({ modeConfiguration }) {
         layoutTemplate: () => {
           // Default right panels
           const defaultRightPanels = [
+            cornerstone.report,
             cornerstone.segmentation,
             tracked.measurements,
-            cornerstone.report,
           ];
 
           // Conditionally add tracked.thumbnailList to rightPanels if multimonitor is true
