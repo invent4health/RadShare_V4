@@ -12,6 +12,7 @@ import SplineROI from './SplineROI';
 import LivewireContour from './LivewireContour';
 import Probe from './Probe';
 import UltrasoundDirectional from './UltrasoundDirectional';
+import spineLabelTool from './SpineLabelTool';
 
 const measurementServiceMappingsFactory = (
   measurementService: MeasurementService,

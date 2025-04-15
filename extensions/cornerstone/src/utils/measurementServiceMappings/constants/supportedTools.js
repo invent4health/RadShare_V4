@@ -9,7 +9,7 @@ const supportedTools = [
   'Probe',
   'RectangleROI',
   'PlanarFreehandROI',
-  'SplineROI',
+  'SpineLabel',
   'LivewireContour',
   'UltrasoundDirectionalTool',
   'SCOORD3DPoint',

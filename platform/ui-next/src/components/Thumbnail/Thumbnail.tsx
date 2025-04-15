@@ -80,17 +80,39 @@ const Thumbnail = ({
             )}
 
             {/* bottom left */}
-            <div className="absolute bottom-0 left-0 flex h-[14px] items-center gap-[4px] rounded-tr pt-[10px] pb-[8px] pr-[6px] pl-[3px]">
-              <div
-                className={classnames(
-                  'h-[16px] w-[16px] rounded-full border-2 transition-all duration-400',
-                  loadingProgress < 1
-                    ? 'border-primary animate-spin border-dashed'
-                    : isActive || isHydratedForDerivedDisplaySet
-                      ? 'border-highlight'
-                      : 'border-primary/60'
-                )}
-              ></div>
+            <div className="absolute bottom-0 left-0 flex h-[16px] items-center gap-[4px] rounded-tr pt-[10px] pb-[15px] pr-[6px] pl-[3px]">
+              <div className="relative h-[26px] w-[26px]">
+                <svg
+                  className="h-full w-full -rotate-90 transform"
+                  viewBox="0 0 36 36"
+                >
+                  <circle
+                    className="text-gray-300"
+                    strokeWidth="4"
+                    stroke="currentColor"
+                    fill="transparent"
+                    r="16"
+                    cx="18"
+                    cy="18"
+                  />
+                  <circle
+                    className="text-green-500 transition-all duration-300"
+                    strokeWidth="4"
+                    strokeDasharray="100"
+                    strokeDashoffset={100 - loadingProgress * 100}
+                    strokeLinecap="round"
+                    stroke="currentColor"
+                    fill="transparent"
+                    r="16"
+                    cx="18"
+                    cy="18"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center text-[8px] font-semibold leading-none text-green-600">
+                  {Math.round(loadingProgress * 100)}%
+                </div>
+              </div>
+
               <div className="text-[11px] font-semibold text-white">{modality}</div>
             </div>
 

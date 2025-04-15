@@ -83,8 +83,12 @@ const Header: React.FC<HeaderProps> = ({
   }, []);
 
   // Adjust position based on multi-monitor setup
-  const centerPosition = isMultiMonitor ? 'left-[15%]' : 'left-[50%] -translate-x-1/2';
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+    userAgent.toLowerCase()
+  );
 
+  const centerPosition = isMultiMonitor || isMobile ? 'left-[15%]' : 'left-[50%] -translate-x-1/2';
   const onClickReturn = () => {
     if (isReturnEnabled && onClickReturnButton) {
       onClickReturnButton();

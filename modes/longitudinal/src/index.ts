@@ -91,7 +91,8 @@ function modeFactory({ modeConfiguration }) {
   };
 
   // Function to check if multimonitor is specified in the URL
- 
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
 
   const isMultimonitor = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -114,7 +115,8 @@ function modeFactory({ modeConfiguration }) {
         ...imgMode,
         ...WindowLevelPreset,
       ]);
-      toolbarService.createButtonSection('primary', [
+
+      const primaryButtonsFull = [
         'Zoom',
         'Pan',
         'WindowLevel',
@@ -134,10 +136,40 @@ function modeFactory({ modeConfiguration }) {
         'Magnify',
         'Next Case',
         'ImgMode',
-      ]);
+      ];
+
+      const primaryButtonsCompact = ['Zoom', 'Pan', 'WindowLevel', 'Pan', 'Layout', 'StackScroll'];
+
+      toolbarService.createButtonSection(
+        'primary',
+        isMobile ? primaryButtonsCompact : primaryButtonsFull
+      );
+
+      // toolbarService.createButtonSection('primary', [
+      //   'Zoom',
+      //   'Pan',
+      //   'WindowLevel',
+      //   'WindowLevelPreset',
+      //   'MoreTools',
+      //   'StackScroll',
+      //   'MeasurementTools',
+      //   'TrackballRotate',
+      //   'Capture',
+      //   'Layout',
+      //   'Crosshairs',
+      //   'Advanced-Magnify',
+      //   'Reset View',
+      //   'Rotate Right',
+      //   'Flip Horizontal',
+      //   'Angle',
+      //   'Magnify',
+      //   'Next Case',
+      //   'ImgMode',
+      // ]);
 
       window.addEventListener('beforeunload', beforeUnloadHandler);
     },
+
     onModeExit: ({ servicesManager }) => {
       const {
         toolGroupService,

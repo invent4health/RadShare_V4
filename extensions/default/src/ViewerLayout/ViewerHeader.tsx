@@ -76,15 +76,15 @@ function ViewerHeader({ appConfig }: withAppTypes<{ appConfig: AppTypes.Config }
           buttonSection="secondary"
         />
       }
-      //Patient information is hidden
-      // PatientInfo={
-      //   appConfig.showPatientInfo !== PatientInfoVisibility.DISABLED && (
-      //     <HeaderPatientInfo
-      //       servicesManager={servicesManager}
-      //       appConfig={appConfig}
-      //     />
-      //   )
-      // }
+      Patient information is hidden
+      PatientInfo={
+        appConfig.showPatientInfo !== PatientInfoVisibility.DISABLED && (
+          <HeaderPatientInfo
+            servicesManager={servicesManager}
+            appConfig={appConfig}
+          />
+        )
+      }
     >
       <div className="relative flex justify-center gap-[4px]">
         <Toolbar servicesManager={servicesManager} />
