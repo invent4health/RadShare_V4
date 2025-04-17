@@ -12,7 +12,7 @@ import SplineROI from './SplineROI';
 import LivewireContour from './LivewireContour';
 import Probe from './Probe';
 import UltrasoundDirectional from './UltrasoundDirectional';
-import spineLabelTool from './SpineLabelTool';
+
 
 const measurementServiceMappingsFactory = (
   measurementService: MeasurementService,
@@ -49,6 +49,7 @@ const measurementServiceMappingsFactory = (
       LivewireContour: POLYLINE,
       Probe: POINT,
       UltrasoundDirectional: POLYLINE,
+      SpineLabel: POINT,
     };
 
     return TOOL_TYPE_TO_VALUE_TYPE[toolType];
@@ -274,6 +275,7 @@ const measurementServiceMappingsFactory = (
         },
       ],
     },
+
   };
 
   return factories;

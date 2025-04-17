@@ -4,25 +4,17 @@ async function getStudiesForPatientByMRN(dataSource, qidoForStudyUID) {
   }
 
   const mrn = qidoForStudyUID[0].mrn;
-  const patientName = qidoForStudyUID[0].patientName;
+  const pn  = qidoForStudyUID[0].patientName;
 
+  // if not defined or empty, return the original qidoForStudyUID
   if (!mrn) {
     return qidoForStudyUID;
   }
 
-  const queryParams = {
+  return dataSource.query.studies.search({
     patientId: mrn,
     disableWildcard: true,
-  };
-
-  // Only include patientName if it’s safe (e.g., contains only letters and spaces)
-  if (patientName && /^[a-zA-Z\s]+$/.test(patientName)) {
-    queryParams.patientName = patientName;
-  } else {
-    console.warn(`Skipping patientName in query due to invalid format: ${patientName}`);
-  }
-
-  return dataSource.query.studies.search(queryParams);
+  });
 }
 
 export default getStudiesForPatientByMRN;

@@ -69,6 +69,7 @@ class LabellingFlow extends Component<PropType> {
 
   selectTreeSelectCalback = (event, itemSelected) => {
     const label = itemSelected.value;
+    this.setState({ label }); 
     this.props.hide();
     return this.props.labellingDoneCallback(label);
   };

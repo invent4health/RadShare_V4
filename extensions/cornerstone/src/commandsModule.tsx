@@ -417,11 +417,6 @@ function commandsModule({
       }
     },
 
-
-
-
-
-
     // activateToolById: ({ itemId, toolGroupId }) => {
     //   const { viewports } = viewportGridService.getState();
 
@@ -779,11 +774,67 @@ function commandsModule({
 
       viewportGridService.setActiveViewportId(viewportId);
     },
-    arrowTextCallback: ({ callback }) => {
+    // arrowTextCallback: () => {
+    //   const labelConfig = customizationService.getCustomization('measurementLabels');
+    //   const renderContent = customizationService.getCustomization('ui.labellingComponent');
+    //   const { uiDialogService } = servicesManager.services;
+
+    //   callInputDialogAutoComplete({
+    //     uiDialogService,
+    //     labelConfig,
+    //     renderContent,
+    //   });
+    // },
+    arrowTextCallback: async () => {
       const labelConfig = customizationService.getCustomization('measurementLabels');
       const renderContent = customizationService.getCustomization('ui.labellingComponent');
-      callInputDialogAutoComplete(uiDialogService, callback, {}, labelConfig, renderContent);
+      const { uiDialogService } = servicesManager.services;
+
+      // Get the active viewport and selected annotation
+      const enabledElement = _getActiveViewportEnabledElement();
+      let defaultValue = '';
+      let measurement = null;
+
+      if (enabledElement) {
+        const { viewport } = enabledElement;
+        const firstAnnotationSelected = getFirstAnnotationSelected(viewport.element);
+        if (firstAnnotationSelected && firstAnnotationSelected.metadata?.toolName === 'ArrowAnnotate') {
+          measurement = firstAnnotationSelected;
+          defaultValue = firstAnnotationSelected.data?.text || '';
+        }
+      }
+
+      // Call the autocomplete dialog
+      const result = await callInputDialogAutoComplete({
+        uiDialogService,
+        labelConfig,
+        renderContent,
+        measurement,
+        defaultValue,
+      });
+
+      // Update the annotation label if a value is returned
+      if (result && measurement && typeof result === 'string') {
+        measurement.data.text = result;
+        try {
+          // Update annotation without triggering measurementService
+          const existingAnnotation = annotation.state.getAnnotation(measurement.annotationUID);
+          if (existingAnnotation) {
+            existingAnnotation.data.text = result;
+          } else {
+            annotation.state.addAnnotation(measurement, enabledElement.viewport.element);
+          }
+          // Trigger re-render
+          const renderingEngine = cornerstoneViewportService.getRenderingEngine();
+          renderingEngine.render();
+        } catch (error) {
+          console.error('Failed to update annotation:', error);
+        }
+      }
+
+      return result;
     },
+    
     toggleCine: () => {
       const { viewports } = viewportGridService.getState();
       const { isCineEnabled } = cineService.getState();

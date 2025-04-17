@@ -167,6 +167,7 @@ button:active {
 .patient-info-row {
   display: flex;
   justify-content: space-between;
+  margin-right: 2rem;
 }
 
 .info-label {

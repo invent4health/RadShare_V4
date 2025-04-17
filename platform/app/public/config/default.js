@@ -1,31 +1,24 @@
-/** @type {AppTypes.Config} */
-
 window.config = {
-  name: 'config/default.js',
   routerBasename: '/',
   // whiteLabeling: {},
   extensions: [],
   modes: [],
   customizationService: {},
   showStudyList: true,
+  // some windows systems have issues with more than 3 web workers
+  maxNumberOfWebWorkers: 3,
   studyPrefetcher: {
     enabled: true,
     displaySetsCount: 25,
     maxNumPrefetchRequests: 10,
     order: 'closest',
   },
-
-  // some windows systems have issues with more than 3 web workers
-  maxNumberOfWebWorkers: 3,
   // below flag is for performance reasons, but it might not work for all servers
-  showPatientInfo: 'disabled',
   showWarningMessageForCrossOrigin: true,
+  showPatientInfo: 'disabled',
   showCPUFallbackMessage: true,
   showLoadingIndicator: true,
-  experimentalStudyBrowserSort: true,
   strictZSpacingForVolumeViewport: true,
-  groupEnabledModesFirst: true,
-  allowMultiSelectExport: true,
   maxNumRequests: {
     interaction: 100,
     thumbnail: 75,
@@ -33,69 +26,7 @@ window.config = {
     // above, the number of requests can be go a lot higher.
     prefetch: 25,
   },
-
   // filterQueryParam: false,
-  // Defines multi-monitor layouts
-  multimonitor: [
-    {
-      id: 'split',
-      test: ({ multimonitor }) => multimonitor === 'split',
-      screens: [
-        {
-          id: 'ohif0',
-          screen: null,
-          location: {
-            screen: 0,
-            width: 0.5,
-            height: 1,
-            left: 0,
-            top: 0,
-          },
-          options: 'location=no,menubar=no,scrollbars=no,status=no,titlebar=no',
-        },
-        {
-          id: 'ohif1',
-          screen: null,
-          location: {
-            width: 0.5,
-            height: 1,
-            left: 0.5,
-            top: 0,
-          },
-          options: 'location=no,menubar=no,scrollbars=no,status=no,titlebar=no',
-        },
-      ],
-    },
-
-    {
-      id: '2',
-      test: ({ multimonitor }) => multimonitor === '2',
-      screens: [
-        {
-          id: 'ohif0',
-          screen: 0,
-          location: {
-            width: 1,
-            height: 1,
-            left: 0,
-            top: 0,
-          },
-          options: 'fullscreen=yes,location=no,menubar=no,scrollbars=no,status=no,titlebar=no',
-        },
-        {
-          id: 'ohif1',
-          screen: 1,
-          location: {
-            width: 1,
-            height: 1,
-            left: 0,
-            top: 0,
-          },
-          options: 'fullscreen=yes,location=no,menubar=no,scrollbars=no,status=no,titlebar=no',
-        },
-      ],
-    },
-  ],
   defaultDataSourceName: 'dicomweb',
   /* Dynamic config allows user to pass "configUrl" query string this allows to load config without recompiling application. The regex will ensure valid configuration source */
   // dangerouslyUseDynamicConfig: {
@@ -104,7 +35,7 @@ window.config = {
   //   // Example 1, to allow numbers and letters in an absolute or sub-path only.
   //   // regex: /(0-9A-Za-z.]+)(\/[0-9A-Za-z.]+)*/
   //   // Example 2, to restricts to either hosptial.com or othersite.com.
-  //   // regex: /(https:\/\/hospital.com(\/[0-9A-Za-z.]+)*)|(https:\/\/othersite.com(\/[0-9A-Za-z.]+)*)/
+  //   // regex: /(https:\/\/hospital.com(\/[0-9A-Za-z.]+))|(https:\/\/othersite.com(\/[0-9A-Za-z.]+))/
   //   regex: /.*/,
   // },
   dataSources: [
@@ -114,21 +45,19 @@ window.config = {
       configuration: {
         friendlyName: 'DCM4CHEE Server',
         name: 'RADSHARE',
-        wadoUriRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/wado',
-        qidoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
-        wadoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
-        // wadoUriRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/wado',
-        // qidoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
-        // wadoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
-        // wadoUriRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/wado',
-        // qidoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
-        // wadoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
+        wadoUriRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/wado',
+        qidoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
+        wadoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
+        // wadoUriRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/wado',
+        // qidoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
+        // wadoRoot: 'http://3.109.165.700dcm4chee-arc/aets/DCM4CHEE/rs',
         qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         enableStudyLazyLoad: true,
         thumbnailRendering: 'wadors',
         requestOptions: {
           auth: 'admin:admin',
+          timeout: 30000,
         },
         dicomUploadEnabled: true,
         singlepart: 'pdf,video',
@@ -160,6 +89,9 @@ window.config = {
   httpErrorHandler: error => {
     // This is 429 when rejected from the public idc sandbox too often.
     console.warn(error.status);
+
+    // Could use services manager here to bring up a dialog/modal if needed.
+    console.warn('test, navigate to https://ohif.org/');
   },
   // whiteLabeling: {
   //   /* Optional: Should return a React component to be rendered in the "Logo" section of the application's Top Navigation bar */
@@ -180,4 +112,97 @@ window.config = {
   //       ))
   //   },
   // },
+  hotkeys: [
+    {
+      commandName: 'incrementActiveViewport',
+      label: 'Next Viewport',
+      keys: ['right'],
+    },
+    {
+      commandName: 'decrementActiveViewport',
+      label: 'Previous Viewport',
+      keys: ['left'],
+    },
+    { commandName: 'rotateViewportCW', label: 'Rotate Right', keys: ['r'] },
+    { commandName: 'rotateViewportCCW', label: 'Rotate Left', keys: ['l'] },
+    { commandName: 'invertViewport', label: 'Invert', keys: ['i'] },
+    {
+      commandName: 'flipViewportHorizontal',
+      label: 'Flip Horizontally',
+      keys: ['h'],
+    },
+    {
+      commandName: 'flipViewportVertical',
+      label: 'Flip Vertically',
+      keys: ['v'],
+    },
+    { commandName: 'scaleUpViewport', label: 'Zoom In', keys: ['+'] },
+    { commandName: 'scaleDownViewport', label: 'Zoom Out', keys: ['-'] },
+    { commandName: 'fitViewportToWindow', label: 'Zoom to Fit', keys: ['='] },
+    { commandName: 'resetViewport', label: 'Reset', keys: ['space'] },
+    { commandName: 'nextImage', label: 'Next Image', keys: ['down'] },
+    { commandName: 'previousImage', label: 'Previous Image', keys: ['up'] },
+    // {
+    //   commandName: 'previousViewportDisplaySet',
+    //   label: 'Previous Series',
+    //   keys: ['pagedown'],
+    // },
+    // {
+    //   commandName: 'nextViewportDisplaySet',
+    //   label: 'Next Series',
+    //   keys: ['pageup'],
+    // },
+    {
+      commandName: 'setToolActive',
+      commandOptions: { toolName: 'Zoom' },
+      label: 'Zoom',
+      keys: ['z'],
+    },
+    // ~ Window level presets
+    {
+      commandName: 'windowLevelPreset1',
+      label: 'W/L Preset 1',
+      keys: ['1'],
+    },
+    {
+      commandName: 'windowLevelPreset2',
+      label: 'W/L Preset 2',
+      keys: ['2'],
+    },
+    {
+      commandName: 'windowLevelPreset3',
+      label: 'W/L Preset 3',
+      keys: ['3'],
+    },
+    {
+      commandName: 'windowLevelPreset4',
+      label: 'W/L Preset 4',
+      keys: ['4'],
+    },
+    {
+      commandName: 'windowLevelPreset5',
+      label: 'W/L Preset 5',
+      keys: ['5'],
+    },
+    {
+      commandName: 'windowLevelPreset6',
+      label: 'W/L Preset 6',
+      keys: ['6'],
+    },
+    {
+      commandName: 'windowLevelPreset7',
+      label: 'W/L Preset 7',
+      keys: ['7'],
+    },
+    {
+      commandName: 'windowLevelPreset8',
+      label: 'W/L Preset 8',
+      keys: ['8'],
+    },
+    {
+      commandName: 'windowLevelPreset9',
+      label: 'W/L Preset 9',
+      keys: ['9'],
+    },
+  ],
 };

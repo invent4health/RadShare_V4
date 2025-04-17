@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -33,16 +34,11 @@ const Thumbnail = ({
   onReject = () => {},
   onClickUntrack = () => {},
   ThumbnailMenuItems = () => {},
-}: withAppTypes): React.ReactNode => {
-  // TODO: We should wrap our thumbnail to create a "DraggableThumbnail", as
-  // this will still allow for "drag", even if there is no drop target for the
-  // specified item.
+}) => {
   const [collectedProps, drag, dragPreview] = useDrag({
     type: 'displayset',
     item: { ...dragData },
-    canDrag: function (monitor) {
-      return Object.keys(dragData).length !== 0;
-    },
+    canDrag: () => Object.keys(dragData).length !== 0,
   });
 
   const [lastTap, setLastTap] = useState(0);
@@ -59,6 +55,14 @@ const Thumbnail = ({
   };
 
   const renderThumbnailPreset = () => {
+    // Default to 0 if loadingProgress is undefined or invalid
+    const progress =
+      Number.isFinite(loadingProgress) && loadingProgress >= 0 && loadingProgress <= 1
+        ? loadingProgress
+        : 0;
+    const percentage = Math.round(progress * 100); // Convert to 0-100 for display
+    const dashOffset = 100 - percentage;
+
     return (
       <div
         className={classnames(
@@ -99,7 +103,7 @@ const Thumbnail = ({
                     className="text-green-500 transition-all duration-300"
                     strokeWidth="4"
                     strokeDasharray="100"
-                    strokeDashoffset={100 - loadingProgress * 100}
+                    strokeDashoffset={dashOffset}
                     strokeLinecap="round"
                     stroke="currentColor"
                     fill="transparent"
@@ -109,7 +113,7 @@ const Thumbnail = ({
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center text-[8px] font-semibold leading-none text-green-600">
-                  {Math.round(loadingProgress * 100)}%
+                  {`${percentage}%`}
                 </div>
               </div>
 
@@ -188,6 +192,11 @@ const Thumbnail = ({
   };
 
   const renderListPreset = () => {
+    // Default to 0 if loadingProgress is undefined or invalid
+    const progress =
+      Number.isFinite(loadingProgress) && loadingProgress >= 0 && loadingProgress <= 1
+        ? loadingProgress
+        : 0;
     return (
       <div
         className={classnames(
@@ -200,7 +209,7 @@ const Thumbnail = ({
             className={classnames(
               'h-[32px] w-[4px] min-w-[4px] rounded-[2px]',
               isActive || isHydratedForDerivedDisplaySet ? 'bg-highlight' : 'bg-primary/65',
-              loadingProgress && loadingProgress < 1 && 'bg-primary/25'
+              progress < 1 && 'bg-primary/25'
             )}
           ></div>
           <div className="flex h-full w-[calc(100%-12px)] flex-col">
@@ -220,7 +229,6 @@ const Thumbnail = ({
               <div className="text-muted-foreground text-[12px]"> S:{seriesNumber}</div>
               <div className="text-muted-foreground text-[12px]">
                 <div className="flex items-center gap-[4px]">
-                  {' '}
                   {countIcon ? (
                     React.createElement(Icons[countIcon] || Icons.MissingIcon, { className: 'w-3' })
                   ) : (
@@ -309,22 +317,14 @@ Thumbnail.propTypes = {
   displaySetInstanceUID: PropTypes.string.isRequired,
   className: PropTypes.string,
   imageSrc: PropTypes.string,
-  /**
-   * Data the thumbnail should expose to a receiving drop target. Use a matching
-   * `dragData.type` to identify which targets can receive this draggable item.
-   * If this is not set, drag-n-drop will be disabled for this thumbnail.
-   *
-   * Ref: https://react-dnd.github.io/react-dnd/docs/api/use-drag#specification-object-members
-   */
   dragData: PropTypes.shape({
-    /** Must match the "type" a dropTarget expects */
     type: PropTypes.string.isRequired,
   }),
   imageAltText: PropTypes.string,
   description: PropTypes.string.isRequired,
   seriesNumber: PropTypes.any,
   numInstances: PropTypes.number.isRequired,
-  loadingProgress: PropTypes.number,
+  loadingProgress: PropTypes.number, // Expected as 0 to 1, displayed as 0 to 100
   messages: PropTypes.object,
   isActive: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,

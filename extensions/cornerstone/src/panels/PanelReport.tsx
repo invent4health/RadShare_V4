@@ -46,8 +46,6 @@ export default function PanelReport(props) {
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
 
- 
-
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
@@ -266,11 +264,22 @@ export default function PanelReport(props) {
       <PanelSection.Content>
         <div className="patient-info-container">
           <div className="patient-info-grid">
-            <div className="patient-info-row">
-              <span className="info-value">{patientDetails.patientName}</span>
-              <span className="info-value">{patientDetails.patientSex}</span>
-              <span className="info-value">{patientDetails.patientID}</span>
-              <span className="info-value">{patientDetails.patientAge}</span>
+            <div className="flex flex-wrap gap-x-4 text-lg text-white">
+              <span>
+                <span className="font-semibold">Name:</span> {patientDetails.patientName}
+              </span>
+              <span>
+                <span className="font-semibold">Sex:</span> {patientDetails.patientSex}
+              </span>
+              <span>
+                <span className="font-semibold">Patient ID:</span> {patientDetails.patientID}
+              </span>
+              <span>
+                <span className="font-semibold">Age:</span> {patientDetails.patientAge}
+              </span>
+              <span>
+                <span className="font-semibold">Clinical info:</span> {patientDetails.studyDescription}
+              </span>
             </div>
           </div>
         </div>

@@ -41,7 +41,6 @@ const contextMenu = ({ commands, other, onClose, position }) => {
     'Rotate Right',
     'Reset View',
     'Bidirectional',
-    'ArrowAnnotate',
     'EllipticalROI',
     'RectangleROI',
     'PlanarFreehandROI',

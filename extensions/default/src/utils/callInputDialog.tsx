@@ -57,6 +57,10 @@ export async function callInputDialog({
   submitOnEnter = true,
 }: {
   uiDialogService: AppTypes.UIDialogService;
+  defaultValue?: string;
+  title?: string;
+  placeholder?: string;
+  submitOnEnter?: boolean;
 }) {
   const dialogId = 'dialog-enter-annotation';
 
@@ -80,22 +84,67 @@ export async function callInputDialog({
   return value;
 }
 
+// export async function callInputDialogAutoComplete({
+//   measurement,
+//   uiDialogService,
+//   labelConfig,
+//   renderContent = LabellingFlow,
+// }) {
+//   const exclusive = labelConfig ? labelConfig.exclusive : false;
+//   const dropDownItems = labelConfig ? labelConfig.items : [];
+
+//   const value = await new Promise<Map<string, string>>((resolve, reject) => {
+//     const labellingDoneCallback = value => {
+//       uiDialogService.hide('select-annotation');
+//       if (typeof value === 'string') {
+//         measurement.label = value;
+//       }
+//       resolve(measurement);
+//     };
+
+//     uiDialogService.show({
+//       id: 'select-annotation',
+//       title: 'Annotation',
+//       content: renderContent,
+//       contentProps: {
+//         labellingDoneCallback: labellingDoneCallback,
+//         measurementData: measurement,
+//         componentClassName: {},
+//         labelData: dropDownItems,
+//         exclusive: exclusive,
+//       },
+//     });
+//   });
+
+//   return value;
+// }
 export async function callInputDialogAutoComplete({
   measurement,
   uiDialogService,
   labelConfig,
   renderContent = LabellingFlow,
+  defaultValue = '',
 }) {
-  const exclusive = labelConfig ? labelConfig.exclusive : false;
-  const dropDownItems = labelConfig ? labelConfig.items : [];
+  if (!uiDialogService || typeof uiDialogService.show !== 'function') {
+    console.error('❌ uiDialogService is invalid');
+    return;
+  }
 
-  const value = await new Promise<Map<string, string>>((resolve, reject) => {
+  const exclusive = labelConfig?.exclusive ?? false;
+  const dropDownItems = labelConfig?.items ?? [];
+
+  console.log('🛠️ Autocomplete Config:', { defaultValue, dropDownItems }); // Debug log
+
+  const value = await new Promise<string>((resolve, reject) => {
     const labellingDoneCallback = value => {
-      uiDialogService.hide('select-annotation');
-      if (typeof value === 'string') {
-        measurement.label = value;
+      console.log('✅ Selected Label:', value); // Debug log
+      if (measurement && typeof value === 'string') {
+        measurement.label = value; // Update measurement.label (optional)
+        resolve(value);
+      } else {
+        resolve(value);
       }
-      resolve(measurement);
+      uiDialogService.hide('select-annotation');
     };
 
     uiDialogService.show({
@@ -103,11 +152,12 @@ export async function callInputDialogAutoComplete({
       title: 'Annotation',
       content: renderContent,
       contentProps: {
-        labellingDoneCallback: labellingDoneCallback,
-        measurementData: measurement,
+        labellingDoneCallback,
+        measurementData: measurement || {},
+        defaultValue,
         componentClassName: {},
         labelData: dropDownItems,
-        exclusive: exclusive,
+        exclusive,
       },
     });
   });
