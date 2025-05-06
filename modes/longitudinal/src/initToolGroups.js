@@ -228,6 +228,7 @@ function initMPRToolGroup(extensionManager, toolGroupService, commandsManager) {
       { toolName: toolNames.SplineROI },
       { toolName: toolNames.LivewireContour },
       { toolName: toolNames.WindowLevelRegion },
+
       {
         toolName: toolNames.PlanarFreehandContourSegmentation,
         configuration: {

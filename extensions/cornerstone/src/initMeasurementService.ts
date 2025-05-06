@@ -97,7 +97,6 @@ const initMeasurementService = (
     ArrowAnnotate.toAnnotation,
     ArrowAnnotate.toMeasurement
   );
-
   measurementService.addMapping(
     csTools3DVer1MeasurementSource,
     'CobbAngle',

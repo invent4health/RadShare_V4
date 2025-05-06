@@ -55,6 +55,7 @@ function initDefaultToolGroup(extensionManager, toolGroupService, commandsManage
             }),
         },
       },
+     
       { toolName: toolNames.Bidirectional },
       { toolName: toolNames.DragProbe },
       { toolName: toolNames.Probe },

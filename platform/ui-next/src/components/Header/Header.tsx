@@ -11,6 +11,10 @@ import {
 } from '../';
 
 import NavBar from '../NavBar';
+const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+  navigator.userAgent.toLowerCase()
+);
 
 interface HeaderProps {
   children?: ReactNode;
@@ -110,9 +114,12 @@ const Header: React.FC<HeaderProps> = ({
             onClick={onClickReturn}
             data-cy="return-to-work-list"
           >
-            <div className="ml-1">
-              {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Icons.OHIFLogo />}
-            </div>
+            {' '}
+            {!isMobile && (
+              <div className="ml-1">
+                {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Icons.OHIFLogo />}
+              </div>
+            )}
           </div>
         </div>
         <div className={`absolute ${centerPosition} top-1/2 -translate-y-1/2 transform`}>

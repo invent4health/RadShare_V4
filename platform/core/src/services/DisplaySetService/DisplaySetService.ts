@@ -417,7 +417,7 @@ export default class DisplaySetService extends PubSubService {
     }
 
     this.getActiveDisplaySets().forEach(displaySet => {
-      if (comparator(displaySet)) {
+      if (comparator(displaySet)) {f
         result.push(displaySet);
       }
     });

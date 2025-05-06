@@ -36,7 +36,6 @@ import ContextMenu from './contextmenu';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import getCornerstoneBlendMode from './utils/getCornerstoneBlendMode';
-import Report from './Report';
 import { DicomMetadataStore } from '@ohif/core';
 import { content } from 'html2canvas/dist/types/css/property-descriptors/content';
 const { DefaultHistoryMemo } = csUtils.HistoryMemo;
@@ -44,6 +43,7 @@ const toggleSyncFunctions = {
   imageSlice: toggleImageSliceSync,
   voi: toggleVOISliceSync,
 };
+
 let currentMenuContainer: HTMLDivElement | null = null;
 function commandsModule({
   servicesManager,
@@ -774,17 +774,16 @@ function commandsModule({
 
       viewportGridService.setActiveViewportId(viewportId);
     },
-    // arrowTextCallback: () => {
-    //   const labelConfig = customizationService.getCustomization('measurementLabels');
-    //   const renderContent = customizationService.getCustomization('ui.labellingComponent');
-    //   const { uiDialogService } = servicesManager.services;
+    //   arrowTextCallback: () => {
+    // const labelConfig = customizationService.getCustomization('measurementLabels');
+    //     const renderContent = customizationService.getCustomization('ui.labellingComponent');
 
-    //   callInputDialogAutoComplete({
-    //     uiDialogService,
-    //     labelConfig,
-    //     renderContent,
-    //   });
-    // },
+    //     const value = await callInputDialogAutoComplete({
+    //       uiDialogService,
+    //       labelConfig,
+    //       renderContent,
+    //     });
+    //   },
     arrowTextCallback: async () => {
       const labelConfig = customizationService.getCustomization('measurementLabels');
       const renderContent = customizationService.getCustomization('ui.labellingComponent');
@@ -792,15 +791,18 @@ function commandsModule({
 
       // Get the active viewport and selected annotation
       const enabledElement = _getActiveViewportEnabledElement();
-      let defaultValue = '';
+      let defaultValue = 'L1';
       let measurement = null;
 
       if (enabledElement) {
         const { viewport } = enabledElement;
         const firstAnnotationSelected = getFirstAnnotationSelected(viewport.element);
-        if (firstAnnotationSelected && firstAnnotationSelected.metadata?.toolName === 'ArrowAnnotate') {
+        if (
+          firstAnnotationSelected &&
+          firstAnnotationSelected.metadata?.toolName === 'ArrowAnnotate'
+        ) {
           measurement = firstAnnotationSelected;
-          defaultValue = firstAnnotationSelected.data?.text || '';
+          defaultValue = firstAnnotationSelected.data?.text || 'L1';
         }
       }
 
@@ -834,7 +836,9 @@ function commandsModule({
 
       return result;
     },
-    
+
+    // Track C1 to C7
+
     toggleCine: () => {
       const { viewports } = viewportGridService.getState();
       const { isCineEnabled } = cineService.getState();
@@ -1366,66 +1370,6 @@ function commandsModule({
         console.error('Error fetching the next study UID:', error);
       }
     },
-    openReport: () => {
-      const { activeViewportId, viewports } = viewportGridService.getState();
-      const activeViewportSpecificData = viewports.get(activeViewportId);
-      const { displaySetInstanceUIDs } = activeViewportSpecificData;
-      const displaySetInstanceUID = displaySetInstanceUIDs[0];
-
-      const displaySets = displaySetService.activeDisplaySets;
-      const activeDisplaySet = displaySets.find(
-        ds => ds.displaySetInstanceUID === displaySetInstanceUID
-      );
-      let patientDetails = {
-        sopInstanceUID: 'Not Available',
-        patientName: 'Not Available',
-        patientID: 'Not Available',
-        patientAge: 'Not Available',
-        patientSex: 'Not Available',
-        performedProcedureStepStartDate: 'Not Available',
-        studyDescription: 'Not Available',
-      };
-      if (activeDisplaySet) {
-        // Access the first metadata entry
-        const firstMetadata = activeDisplaySet.images
-          ? activeDisplaySet.images[0] // For image stacks
-          : activeDisplaySet.instance; // For single instance
-
-        const sopInstanceUID = firstMetadata?.['00080018'] || firstMetadata?.SOPInstanceUID;
-        const patientName = firstMetadata?.['00100010'] || firstMetadata?.PatientName;
-        const patientID = firstMetadata?.['00100020'] || firstMetadata?.PatientID;
-        const patientAge = firstMetadata?.['00101010'] || firstMetadata?.PatientAge;
-        const patientSex = firstMetadata?.['00100040'] || firstMetadata?.PatientSex;
-        const performedProcedureStepStartDate =
-          firstMetadata?.['00400244'] || firstMetadata?.PerformedProcedureStepStartDate;
-        const studyDescription = firstMetadata?.['00081030'] || firstMetadata?.StudyDescription;
-
-        // Prepare the patient details as an object
-        patientDetails = {
-          sopInstanceUID: sopInstanceUID || 'Not Available',
-          patientName: formatPN(patientName),
-          patientID: patientID || 'Not Available',
-          patientAge: patientAge || 'Not Available',
-          patientSex: patientSex || 'Not Available',
-          performedProcedureStepStartDate: performedProcedureStepStartDate || 'Not Available',
-          studyDescription: studyDescription || 'Not Available',
-        };
-      }
-
-      const { uiModalService } = servicesManager.services;
-      if (uiModalService) {
-        uiModalService.show({
-          content: Report,
-          title: 'Report',
-          contentProps: {
-            onClose: () => uiModalService.hide(),
-            PatientInfo: patientDetails,
-          },
-          closeButton: false,
-          containerClassName: 'max-w-5xl h-screen flex items-center ',
-        });
-      }
-    },
 
     attachProtocolViewportDataListener: ({ protocol, stageIndex }) => {
       const EVENT = cornerstoneViewportService.EVENTS.VIEWPORT_DATA_CHANGED;
@@ -1911,9 +1855,6 @@ function commandsModule({
     redo: () => {
       DefaultHistoryMemo.redo();
     },
-    check: () => {
-      console.log('working');
-    },
   };
 
   const definitions = {
@@ -2180,9 +2121,6 @@ function commandsModule({
     deleteActiveAnnotation: {
       commandFn: actions.deleteActiveAnnotation,
     },
-    openReport: {
-      commandFn: actions.openReport,
-    },
     nextcase: {
       commandFn: actions.nextcase,
     },
@@ -2194,6 +2132,9 @@ function commandsModule({
     },
     copyImageToClipboard: {
       commandFn: actions.copyImageToClipboard,
+    },
+    check: {
+      commandFn: actions.check,
     },
     // activateReportpanel: {
     //   commandFn: actions.activateReportpanel,

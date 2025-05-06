@@ -6,6 +6,7 @@ import axios from 'axios';
 import { PanelSection } from '@ohif/ui-next';
 import './ReportPanel.css';
 import toast, { Toaster } from 'react-hot-toast';
+
 function formatPN(name) {
   if (!name) {
     return;
@@ -36,6 +37,12 @@ export default function PanelReport(props) {
   const [error, setError] = useState(null); // To handle errors
   const [isEdited, setIsEdited] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [clinicalInfo, setClinicalInfo] = useState('Not Available');
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [symptoms, setSymptoms] = useState('');
+  const [findings, setFindings] = useState('');
+
   // Assuming commandsModule is a function that takes parameters
   useEffect(() => {
     const handleBeforeUnload = event => {
@@ -62,9 +69,15 @@ export default function PanelReport(props) {
   }, []);
   useEffect(() => {
     if (studyUID) {
-      loadReport(); // Load report content if a studyUID is available
+      loadReport();
+      fetchClinicalInfo(); // Load report content if a studyUID is available
     }
   }, [studyUID]);
+  useEffect(() => {
+    if (clinicalInfo) {
+      setSymptoms(clinicalInfo);
+    }
+  }, [clinicalInfo]);
   const fetchTemplates = async () => {
     try {
       const response = await axios.get(
@@ -85,6 +98,87 @@ export default function PanelReport(props) {
       setError('No Study Instance UIDs available.');
     }
   };
+  const cleanClinicalInfo = (info: string): string => {
+    if (!info) {
+      return '';
+    }
+
+    return info
+      .replace(/[-–—]+/g, ' ') // replaces long dashes or multiple hyphens with a space
+      .replace(/[^\w\s.,]/g, '') // removes symbols except dot and comma
+      .replace(/\s+/g, ' ') // collapse multiple spaces
+      .trim(); // remove leading/trailing spaces
+  };
+  const fetchClinicalInfo = async () => {
+    setLoading(true);
+    setError(null);
+
+    // Check if clinical info is already available in localStorage
+
+    const savedClinicalInfo = localStorage.getItem(`clinicalInfo_${studyUID}`);
+    if (savedClinicalInfo) {
+      setClinicalInfo(cleanClinicalInfo(savedClinicalInfo)); // Use cached value
+      setLoading(false);
+      return;
+    } else {
+      const response = await axios.get(
+        `http://3.77.246.193/radshare-appapi/api/radshareopenapi/fetch-clinical-infoByStudyIuID?studyIuId=${studyUID}`
+      );
+      console.log(response);
+      if (response.data.info) {
+        const info = String(response.data.info);
+        setClinicalInfo(cleanClinicalInfo(info)); // Clean and set the info
+        // Save it to localStorage for future use
+        localStorage.setItem(`clinicalInfo_${studyUID}`, info);
+      } else {
+        setClinicalInfo('No clinical information available');
+      }
+    }
+    setLoading(false);
+  };
+
+  const handleGenerateClick = async () => {
+    if (!isPopupVisible) {
+      // Open the popup
+      setIsPopupVisible(true);
+    }
+  };
+
+  const handleSubmitReport = async () => {
+    let Modality;
+
+    const studies = DicomMetadataStore.getStudyInstanceUIDs();
+    if (studies.length > 0) {
+      const study = DicomMetadataStore.getStudy(studies[0]);
+      const series = study.series?.[0];
+      Modality = series?.Modality;
+    }
+
+    try {
+      const payload = {
+        modality: Modality,
+        symptoms,
+        findings,
+      };
+
+      const response = await axios.post(
+        'http://3.77.246.193/api/radshareopenapi/report-gen-stream',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('API Response:', response.data);
+      toast.success('Report generated successfully!');
+      setIsPopupVisible(false); // Close popup after success
+    } catch (error) {
+      console.error('Error generating report:', error);
+    }
+  };
+
   const loadReport = async () => {
     setLoading(true);
     setError(null);
@@ -249,12 +343,6 @@ export default function PanelReport(props) {
     }
   }
 
-  // Log the output to console
-  console.log(
-    'Commands Module Output:',
-    panelService.getPanelStatus('@ohif/extension-cornerstone.panelModule.PanelReport')
-  );
-
   return (
     <PanelSection defaultOpen={true}>
       <PanelSection.Header className="report-header">
@@ -265,25 +353,19 @@ export default function PanelReport(props) {
         <div className="patient-info-container">
           <div className="patient-info-grid">
             <div className="flex flex-wrap gap-x-4 text-lg text-white">
-              <span>
-                <span className="font-semibold">Name:</span> {patientDetails.patientName}
+              <span className="font-semibold">
+                Name:&nbsp;{patientDetails.patientName} &nbsp;Sex:&nbsp;{patientDetails.patientSex}
+                &nbsp;Patient ID:&nbsp;{patientDetails.patientID}&nbsp; Age:
+                {patientDetails.patientAge}
               </span>
               <span>
-                <span className="font-semibold">Sex:</span> {patientDetails.patientSex}
-              </span>
-              <span>
-                <span className="font-semibold">Patient ID:</span> {patientDetails.patientID}
-              </span>
-              <span>
-                <span className="font-semibold">Age:</span> {patientDetails.patientAge}
-              </span>
-              <span>
-                <span className="font-semibold">Clinical info:</span> {patientDetails.studyDescription}
+                <span className="font-semibold">Clinical info:</span>
+                {loading ? <em className="text-gray-400">Loading...</em> : clinicalInfo}
               </span>
             </div>
           </div>
         </div>
-        <div className="template-dropdown white">
+        <div className="template-dropdown">
           <label
             htmlFor="templateDropdown"
             className="template-label white"
@@ -312,6 +394,48 @@ export default function PanelReport(props) {
           >
             Save/Confirm
           </button>
+          <button
+            type="button"
+            className="save-button"
+            onClick={handleGenerateClick}
+          >
+            Generate Report {isPopupVisible ? '🔼' : '🔽'}
+          </button>
+          {isPopupVisible && (
+            <div className="popup">
+              <div className="popup-content">
+                <span
+                  className="close-button"
+                  onClick={() => setIsPopupVisible(false)}
+                >
+                  &times;
+                </span>
+                <h2>Generate Report</h2>
+                <div>
+                  <label>Symptoms:</label>
+                  <input
+                    type="text"
+                    value={symptoms}
+                    onChange={e => setSymptoms(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label>Findings:</label>
+                  <textarea
+                    rows={4}
+                    value={findings}
+                    onChange={e => setFindings(e.target.value)}
+                  />
+                </div>
+                <button
+                  className="submit-button"
+                  onClick={handleSubmitReport}
+                >
+                  Submit Report
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         <div className="editor-wrapper">
           <Editor

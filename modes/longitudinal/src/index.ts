@@ -92,7 +92,9 @@ function modeFactory({ modeConfiguration }) {
 
   // Function to check if multimonitor is specified in the URL
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+  const isMobile = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+    navigator.userAgent.toLowerCase()
+  );
 
   const isMultimonitor = () => {
     const urlParams = new URLSearchParams(window.location.search);

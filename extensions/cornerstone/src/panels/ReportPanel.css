@@ -17,22 +17,16 @@ body {
 }
 
 /* Dropdown styling */
-#templateDropdown,
 #templateDropdownmenu {
-  padding: 8px 12px;
+  padding: 4px 6px;
   margin-right: 10px;
   border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 5px;
+  font-size: 11px;
   background-color: #fff;
   color: #495057;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#templateDropdownmenu {
-  padding: 4px 6px;
-  font-size: 11px;
-  border-radius: 5px;
+  width: 200px;
 }
 
 #templateDropdown option {
@@ -65,6 +59,7 @@ body {
   padding: 4px 8px;
   font-size: 12px;
   border-radius: 2px;
+  margin-right: 2px;
 }
 
 .button-container button:hover,
@@ -87,8 +82,8 @@ button:active {
 /* Styling the editor */
 .editor-wrapper {
   flex-grow: 1;
-  height: 600px;
-  max-height: 600px;
+  height: 700px;
+  max-height: 700px;
   overflow-y: auto;
   padding: 10px;
   background-color: #ffffff;
@@ -157,12 +152,12 @@ button:active {
   color: #333;
 }
 
-.patient-info-grid {
+/* .patient-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   row-gap: 10px;
   column-gap: 20px;
-}
+} */
 
 .patient-info-row {
   display: flex;
@@ -177,4 +172,75 @@ button:active {
 
 .info-value {
   color: white;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+}
+
+.popup-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.popup-content label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.popup-content input,
+.popup-content textarea {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin-top: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
 }

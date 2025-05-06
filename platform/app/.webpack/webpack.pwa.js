@@ -143,7 +143,7 @@ module.exports = (env, argv) => {
     devServer: {
       // gzip compression of everything served
       // Causes Cypress: `wait-on` issue in CI
-      // compress: true,
+      compress: true,
       // http2: true,
       // https: true,
       open: true,

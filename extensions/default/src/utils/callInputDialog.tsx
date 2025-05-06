@@ -126,18 +126,18 @@ export async function callInputDialogAutoComplete({
   defaultValue = '',
 }) {
   if (!uiDialogService || typeof uiDialogService.show !== 'function') {
-    console.error('❌ uiDialogService is invalid');
+    // console.error('❌ uiDialogService is invalid');
     return;
   }
 
   const exclusive = labelConfig?.exclusive ?? false;
   const dropDownItems = labelConfig?.items ?? [];
 
-  console.log('🛠️ Autocomplete Config:', { defaultValue, dropDownItems }); // Debug log
+  // console.log('🛠️ Autocomplete Config:', { defaultValue, dropDownItems }); // Debug log
 
   const value = await new Promise<string>((resolve, reject) => {
     const labellingDoneCallback = value => {
-      console.log('✅ Selected Label:', value); // Debug log
+      // console.log('✅ Selected Label:', value); // Debug log
       if (measurement && typeof value === 'string') {
         measurement.label = value; // Update measurement.label (optional)
         resolve(value);

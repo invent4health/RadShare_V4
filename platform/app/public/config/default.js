@@ -45,14 +45,6 @@ window.config = {
       configuration: {
         friendlyName: 'DCM4CHEE Server',
         name: 'RADSHARE',
-<<<<<<< HEAD
-        wadoUriRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/wado',
-        qidoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
-        wadoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
-        // wadoUriRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/wado',
-        // qidoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
-        // wadoRoot: 'http://3.109.165.700dcm4chee-arc/aets/DCM4CHEE/rs',
-=======
         // wadoUriRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/wado',
         // qidoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
         // wadoRoot: 'http://3.109.165.70/dcm4chee-arc/aets/DCM4CHEE/rs',
@@ -62,14 +54,15 @@ window.config = {
         // wadoUriRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/wado',
         // qidoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
         // wadoRoot: 'http://102.67.142.34:8084/dcm4chee-arc/aets/RADSHARE/rs',
->>>>>>> aa4b424541865eb48e156dbca841a19c1c442311
+        // wadoUriRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
+        // qidoRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
+        // wadoRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
         qidoSupportsIncludeField: true,
         imageRendering: 'wadors',
         enableStudyLazyLoad: true,
         thumbnailRendering: 'wadors',
         requestOptions: {
           auth: 'admin:admin',
-          timeout: 30000,
         },
         dicomUploadEnabled: true,
         singlepart: 'pdf,video',
