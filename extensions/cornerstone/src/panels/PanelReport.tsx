@@ -124,7 +124,8 @@ export default function PanelReport(props) {
       );
       setTemplates(response.data.ReportData || []);
     } catch (error) {
-      console.error('Error fetching templates:', error);
+      console.log('Error fetching templates:', error);
+
       setError('Failed to load templates.');
     }
   };

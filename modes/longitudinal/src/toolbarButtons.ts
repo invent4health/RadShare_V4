@@ -397,6 +397,19 @@ const toolbarButtons: Button[] = [
     },
   },
   {
+    id: 'ImagetoPdf',
+    uiType: 'ohif.toolButton',
+    props: {
+      type: 'tool',
+      icon: 'prev-arrow',
+      label: 'Undo',
+      commands: {
+        commandName: 'exportPatientReportAsPDF',
+      },
+      evaluate: 'evaluate.action',
+    },
+  },
+  {
     id: 'Redo',
     uiType: 'ohif.toolButton',
     props: {

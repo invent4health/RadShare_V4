@@ -17,6 +17,8 @@ import * as cornerstoneTools from '@cornerstonejs/tools';
 import { createRoot } from 'react-dom/client';
 import { Types as OhifTypes, utils } from '@ohif/core';
 import i18n from '@ohif/i18n';
+
+import jsPDF from 'jspdf';
 import {
   callInputDialogAutoComplete,
   createReportAsync,
@@ -412,6 +414,85 @@ function commandsModule({
         uiNotificationService.show({
           title: 'Copy Failed',
           message: 'Failed to copy image to clipboard',
+          type: 'error',
+        });
+      }
+    },
+
+    exportPatientReportAsPDF: async () => {
+      const { uiNotificationService } = servicesManager.services;
+
+      try {
+        const { activeViewportId, viewports } = viewportGridService.getState();
+        const activeViewportSpecificData = viewports.get(activeViewportId);
+        const { displaySetInstanceUIDs } = activeViewportSpecificData;
+        const displaySetInstanceUID = displaySetInstanceUIDs[0];
+
+        const displaySets = displaySetService.activeDisplaySets;
+        const activeDisplaySet = displaySets.find(
+          ds => ds.displaySetInstanceUID === displaySetInstanceUID
+        );
+
+        let patientID = 'Not Available';
+        let patientName = 'Not Available';
+
+        if (activeDisplaySet) {
+          const firstMetadata = activeDisplaySet.images
+            ? activeDisplaySet.images[0]
+            : activeDisplaySet.instance;
+
+          patientID = firstMetadata?.['00100020'] || firstMetadata?.PatientID || 'Not Available';
+          patientName = formatPN(firstMetadata?.['00100010'] || firstMetadata?.PatientName);
+        }
+
+        // Get canvas image
+        const enabledElement = _getActiveViewportEnabledElement();
+        if (!enabledElement) {
+          throw new Error('No active viewport found');
+        }
+
+        const { viewport } = enabledElement;
+        const canvas = viewport.getCanvas();
+        const imageData = canvas.toDataURL('image/png');
+
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+
+        // Title
+        let y = 15;
+        pdf.setFontSize(14);
+        pdf.text('Patient Summary Report', 10, y);
+        y += 10;
+
+        // Name (left) and ID (right)
+        pdf.setFontSize(12);
+        const margin = 10;
+
+        pdf.text(`Name: ${patientName}`, margin, y);
+        const patientIDText = `ID: ${patientID}`;
+        const textWidth = pdf.getTextWidth(patientIDText);
+        pdf.text(patientIDText, pageWidth - margin - textWidth, y);
+
+        y += 10;
+
+        // Add image
+        const imgProps = pdf.getImageProperties(imageData);
+        const imgWidth = 180;
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+        pdf.addImage(imageData, 'PNG', 10, y, imgWidth, imgHeight);
+
+        pdf.save('Patient_Summary.pdf');
+
+        uiNotificationService.show({
+          title: 'Success',
+          message: 'PDF downloaded with patient info and image.',
+          type: 'success',
+        });
+      } catch (error) {
+        console.error('PDF Export Error:', error);
+        uiNotificationService.show({
+          title: 'Export Failed',
+          message: 'Could not generate PDF',
           type: 'error',
         });
       }
@@ -2130,8 +2211,8 @@ function commandsModule({
     activateToolById: {
       commandFn: actions.activateToolById,
     },
-    copyImageToClipboard: {
-      commandFn: actions.copyImageToClipboard,
+    exportPatientReportAsPDF: {
+      commandFn: actions.exportPatientReportAsPDF,
     },
     check: {
       commandFn: actions.check,

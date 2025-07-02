@@ -45,6 +45,7 @@ const contextMenu = ({ commands, other, onClose, position }) => {
     'RectangleROI',
     'PlanarFreehandROI',
     'Copy Image',
+    'ImagetoPdf',
   ];
 
   return (
