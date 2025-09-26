@@ -1,0 +1,365 @@
+/* General Body Styles (Optional) */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Patient Info Section --- */
+.patient-info-container {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #2d2d2d;
+  color: white;
+}
+
+/* --- Main Action Bar (Template Dropdown & Buttons) --- */
+.template-dropdown {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.template-label.white {
+  color: white;
+}
+
+#templateDropdownmenu {
+  padding: 6px 8px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  font-size: 12px;
+  background-color: #333;
+  color: #fff;
+  width: 180px;
+}
+
+.save-button {
+  background-color: #5a5a5a;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-button:hover {
+  background-color: #707070;
+}
+
+/* --- NEW & IMPROVED --- Microphone Button Styles */
+.mic-button,
+.mic-button-popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%; /* Makes it circular */
+  border: 1px solid #777;
+  background-color: #5a5a5a;
+  color: white;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  font-size: 16px; /* Adjust icon/emoji size */
+}
+
+.mic-button:hover,
+.mic-button-popup:hover {
+  background-color: #707070;
+}
+
+/* Style for when the mic is actively listening */
+.mic-button.listening,
+.mic-button-popup.listening {
+  background-color: #e53e3e; /* Red color */
+  border-color: #ff7b7b;
+  animation: pulse 1.5s infinite; /* Apply the pulsing animation */
+}
+
+/* Keyframe animation for the pulsing effect */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(229, 62, 62, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(229, 62, 62, 0);
+  }
+}
+
+/* --- Rich Text Editor Styles --- */
+.editor-wrapper {
+  height: 700px;
+  max-height: 700px;
+  overflow-y: auto;
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+
+.rsw-editor {
+  min-height: 450px;
+  background-color: #ffffff;
+  color: #212529;
+}
+
+/* --- Generate Report & AI Popup Styles --- */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 450px;
+  max-width: 90%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+  color: #212529;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.popup-content label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.popup-content input[type='text'],
+.popup-content textarea {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.prompt-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.prompt-input-wrapper textarea {
+  padding-right: 45px; /* Add space for the mic button */
+}
+
+.mic-button-popup {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none; /* The popup mic doesn't need a border */
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
+
+.submit-button:disabled {
+  background-color: #9e9e9e;
+  cursor: not-allowed;
+}
+/* --- NEW: AI Prompt Modal Styles --- */
+
+.ai-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.ai-modal-content {
+  background: #2a2a3a; /* Dark background similar to OHIF theme */
+  color: #e0e0e0; /* Light text */
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid #444;
+}
+
+.ai-modal-content h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #fff;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+}
+
+.ai-modal-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #b0b0b0;
+}
+
+.ai-modal-textarea {
+  width: 100%;
+  height: 250px;
+  background-color: #1e1e2d;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.ai-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.modal-button.submit {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-button.submit:hover {
+  background-color: #0056b3;
+}
+
+.modal-button.cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.modal-button.cancel:hover {
+  background-color: #5a6268;
+}
+
+.modal-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+.mic-button {
+    font-size: 1rem;
+    padding: 10px 15px;
+}
+.mic-button.recording {
+    background-color: #dc3545; /* Red when recording */
+    color: white;
+}
+.mic-button.recording:hover {
+    background-color: #c82333;
+}
+/* Container for the textarea and mic button */
+.prompt-input-area {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+/* Make textarea leave space on the right for the button */
+.prompt-input-area .ai-modal-textarea {
+  flex-grow: 1;
+  padding-right: 50px; /* Adjust this value as needed */
+}
+
+/* Style for the microphone button positioned inside the textarea */
+.mic-button-inline {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #555;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Makes it a circle */
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: background-color 0.2s; /* Smooth color change */
+}
+
+/* Style for when hovering over the button */
+.mic-button-inline:hover {
+  background: #666;
+}
+
+/* Style for when the button is in the "recording" state */
+.mic-button-inline.recording {
+  background: #dc3545; /* Red color */
+}

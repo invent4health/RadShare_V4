@@ -1,0 +1,12 @@
+{
+  "version": "3.10.0-beta.115",
+  "packages": ["extensions/*", "platform/*", "modes/*", "addOns/externals/*"],
+  "npmClient": "yarn",
+  "command": {
+    "run": {
+      "npmClient": "yarn",
+      "stream": true,
+      "concurrency": 2
+    }
+  }
+}
