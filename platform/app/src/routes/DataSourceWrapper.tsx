@@ -149,9 +149,11 @@ function DataSourceWrapper(props: withAppTypes) {
 
     // 204: no content
     async function getData() {
+      console.log('🔍 DataSourceWrapper.getData called with queryFilterValues:', queryFilterValues);
       setIsLoading(true);
       log.time(Enums.TimingEnum.SEARCH_TO_LIST);
       const studies = await dataSource.query.studies.search(queryFilterValues);
+      console.log('🔍 DataSourceWrapper received studies:', studies?.length || 0, 'studies');
 
       setData({
         studies: studies || [],
