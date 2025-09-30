@@ -111,8 +111,12 @@ StudyBrowser.propTypes = {
               seriesNumber: PropTypes.any,
               numInstances: PropTypes.number,
               description: PropTypes.string,
-              componentType: PropTypes.oneOf(['thumbnail', 'thumbnailTracked', 'thumbnailNoImage'])
-                .isRequired,
+              componentType: PropTypes.oneOf([
+                'thumbnail',
+                'thumbnailTracked',
+                'thumbnailNoImage',
+                'noThumbnail',
+              ]).isRequired,
               isTracked: PropTypes.bool,
               /**
                * Data the thumbnail should expose to a receiving drop target. Use a matching

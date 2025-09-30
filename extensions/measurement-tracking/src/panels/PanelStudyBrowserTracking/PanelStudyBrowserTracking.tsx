@@ -201,9 +201,7 @@ export default function PanelStudyBrowserTracking({
     let currentDisplaySets = displaySetService.activeDisplaySets;
     // filter non based on the list of modalities that are supported by cornerstone
     currentDisplaySets = currentDisplaySets.filter(
-      ds =>
-        !thumbnailNoImageModalities.includes(ds.Modality) &&
-        !(excludedModalitiesConfig && excludedModalitiesConfig.includes(ds.Modality))
+      ds => !thumbnailNoImageModalities.includes(ds.Modality)
     );
 
     if (!currentDisplaySets.length) {
@@ -256,7 +254,8 @@ export default function PanelStudyBrowserTracking({
       dataSource,
       displaySetService,
       uiDialogService,
-      uiNotificationService
+      uiNotificationService,
+      excludedModalitiesConfig
     );
 
     setDisplaySets(mappedDisplaySets);
@@ -268,6 +267,7 @@ export default function PanelStudyBrowserTracking({
     viewports,
     dataSource,
     thumbnailImageSrcMap,
+    excludedModalitiesConfig,
   ]);
 
   // -- displaySetsLoadingState
@@ -336,6 +336,7 @@ export default function PanelStudyBrowserTracking({
   useEffect(() => {
     // TODO: Will this always hold _all_ the displaySets we care about?
     // DISPLAY_SETS_CHANGED returns `DisplaySerService.activeDisplaySets`
+
     const SubscriptionDisplaySetsChanged = displaySetService.subscribe(
       displaySetService.EVENTS.DISPLAY_SETS_CHANGED,
       changedDisplaySets => {
@@ -349,7 +350,8 @@ export default function PanelStudyBrowserTracking({
           dataSource,
           displaySetService,
           uiDialogService,
-          uiNotificationService
+          uiNotificationService,
+          excludedModalitiesConfig
         );
 
         setDisplaySets(mappedDisplaySets);
@@ -369,7 +371,8 @@ export default function PanelStudyBrowserTracking({
           dataSource,
           displaySetService,
           uiDialogService,
-          uiNotificationService
+          uiNotificationService,
+          excludedModalitiesConfig
         );
 
         setDisplaySets(mappedDisplaySets);
@@ -568,7 +571,8 @@ function _mapDisplaySets(
   dataSource,
   displaySetService,
   uiDialogService,
-  uiNotificationService
+  uiNotificationService,
+  excludedModalitiesConfig
 ) {
   const thumbnailDisplaySets = [];
   const thumbnailNoImageDisplaySets = [];
@@ -576,7 +580,7 @@ function _mapDisplaySets(
     .filter(ds => !ds.excludeFromThumbnailBrowser)
     .forEach(ds => {
       const { thumbnailSrc, displaySetInstanceUID } = ds; // thumbnailImageSrcMap[ds.displaySetInstanceUID];
-      const componentType = _getComponentType(ds);
+      const componentType = _getComponentType(ds, excludedModalitiesConfig);
 
       const array =
         componentType === 'thumbnailTracked' ? thumbnailDisplaySets : thumbnailNoImageDisplaySets;
@@ -613,14 +617,31 @@ function _mapDisplaySets(
 
 function _getComponentType(ds, excludedModalitiesConfig) {
   if (excludedModalitiesConfig && excludedModalitiesConfig.includes(ds.Modality)) {
-    return null;
+    console.log('excluded modality', ds.Modality);
+    return 'noThumbnail';
   }
-  if (thumbnailNoImageModalities.includes(ds.Modality) || ds?.unsupported) {
-    return 'thumbnailNoImage';
-  }
+  // if (thumbnailNoImageModalities.includes(ds.Modality) || ds?.unsupported) {
+  //   return 'thumbnailNoImage';
+  // }
 
   return 'thumbnailTracked';
 }
+// function _getComponentType(ds, excludedModalitiesConfig) {
+//   const inExcluded = excludedModalitiesConfig && excludedModalitiesConfig.includes(ds.Modality);
+//   const inNoImage = thumbnailNoImageModalities.includes(ds.Modality);
+
+//   if (inExcluded && inNoImage) {
+//     // Conflict: Modality is in both arrays
+//     return ; // or 'thumbnailNoImage', depending on your logic
+//   }
+//   if (inExcluded) {
+//     return null;
+//   }
+//   if (inNoImage || ds?.unsupported) {
+//     return 'thumbnailNoImage';
+//   }
+//   return 'thumbnailTracked';
+// }
 
 function _findTabAndStudyOfDisplaySet(displaySetInstanceUID, tabs) {
   for (let t = 0; t < tabs.length; t++) {

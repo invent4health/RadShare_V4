@@ -35,6 +35,12 @@ const Thumbnail = ({
   onClickUntrack = () => {},
   ThumbnailMenuItems = () => {},
 }) => {
+  // Handle 'noThumbnail' type: log and render nothing
+  if (thumbnailType === 'noThumbnail') {
+    console.log('noThumbnail type selected');
+    return null;
+  }
+
   const [collectedProps, drag, dragPreview] = useDrag({
     type: 'displayset',
     item: { ...dragData },
@@ -194,6 +200,7 @@ const Thumbnail = ({
       </div>
     );
   };
+  // Early return for noThumbnail type - shows completely empty state
 
   const renderListPreset = () => {
     // Default to 0 if loadingProgress is undefined or invalid
@@ -339,7 +346,12 @@ Thumbnail.propTypes = {
   isTracked: PropTypes.bool,
   onClickUntrack: PropTypes.func,
   countIcon: PropTypes.string,
-  thumbnailType: PropTypes.oneOf(['thumbnail', 'thumbnailTracked', 'thumbnailNoImage']),
+  thumbnailType: PropTypes.oneOf([
+    'thumbnail',
+    'thumbnailTracked',
+    'thumbnailNoImage',
+    'noThumbnail',
+  ]),
 };
 
 export { Thumbnail };
