@@ -1,0 +1,21 @@
+0 silly argv {
+0 silly argv   _: [ 'run' ],
+0 silly argv   stream: true,
+0 silly argv   lernaVersion: '7.4.2',
+0 silly argv   '$0': 'node_modules\\lerna\\dist\\cli.js',
+0 silly argv   script: 'dev:viewer'
+0 silly argv }
+1 notice cli v7.4.2
+2 verbose packageConfigs Explicit "packages" configuration found in lerna.json. Resolving packages using the configured glob(s): ["extensions/*","platform/*","modes/*","addOns/externals/*"]
+3 verbose rootPath D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main
+4 error Error: Failed to process project dependencies with "nx-js-graph-plugin".
+4 error Source project does not exist: npm:prettier-plugin-tailwindcss@0.5.14
+4 error     at validateCommonDependencyRules (D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main\node_modules\nx\src\project-graph\project-graph-builder.js:318:15)
+4 error     at validateDependency (D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main\node_modules\nx\src\project-graph\project-graph-builder.js:313:5)
+4 error     at ProjectGraphBuilder.addDependency (D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main\node_modules\nx\src\project-graph\project-graph-builder.js:190:9)
+4 error     at D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main\node_modules\nx\src\project-graph\build-project-graph.js:184:25
+4 error     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+4 error     at async Promise.all (index 0)
+4 error     at async updateProjectGraphWithPlugins (D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main\node_modules\nx\src\project-graph\build-project-graph.js:178:5)
+4 error     at async buildProjectGraphUsingContext (D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main\node_modules\nx\src\project-graph\build-project-graph.js:98:15)
+4 error     at async buildProjectGraphUsingProjectFileMap (D:\Work\Docker Radshare Viewer Image\Radshare-viewer-docker-code-main\node_modules\nx\src\project-graph\build-project-graph.js:62:24)

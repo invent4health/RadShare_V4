@@ -1,0 +1,34 @@
+/* Custom styling for the download button */
+.download-zip-button {
+  margin-left: 10px !important;
+}
+
+/* Additional styling for better visibility */
+.download-zip-button button {
+  background-color: #007bff !important;
+  color: white !important;
+  border: 1px solid #0056b3 !important;
+  border-radius: 4px !important;
+  padding: 6px 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.download-zip-button button:hover {
+  background-color: #0056b3 !important;
+  border-color: #004085 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3) !important;
+}
+
+/* Custom download icon styling */
+.download-zip-button svg {
+  width: 16px !important;
+  height: 16px !important;
+  margin-right: 6px !important;
+}
+
+/* Ensure the button text is visible */
+.download-zip-button span {
+  color: white !important;
+  font-weight: 500 !important;
+}
