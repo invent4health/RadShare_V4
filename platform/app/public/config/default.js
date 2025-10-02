@@ -14,6 +14,11 @@ window.config = {
         $set: ['SR', 'OT', 'PR'],
       },
     },
+    {
+      'studyBrowser.studyMode': {
+        $set: '15days',
+      },
+    },
   ],
   showStudyList: true,
 
@@ -67,6 +72,9 @@ window.config = {
         wadoUriRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
         qidoRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
         wadoRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
+        // wadoUriRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/wado',
+        // qidoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
+        // wadoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
         // wadoUriRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/wado',
         // qidoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
         // wadoRoot: 'http://13.202.29.77:85/dcm4chee-arc/aets/RADSHAREPL2/rs',
