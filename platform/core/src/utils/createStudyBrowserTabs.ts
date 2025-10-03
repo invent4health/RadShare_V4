@@ -59,6 +59,17 @@ export function createStudyBrowserTabs(
         })
       : [];
 
+  // 15 days tab: studies within last 15 days from today
+  const fifteenDaysMs = 15 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const fifteenDayStudies = allStudies.filter(study => {
+    if (!study.date) {
+      return false;
+    }
+    const studyTimeStamp = new Date(study.date).getTime();
+    return now - studyTimeStamp <= fifteenDaysMs;
+  });
+
   // Newest first
   const _byDate = (a, b) => {
     const dateA = Date.parse(a);
@@ -67,6 +78,11 @@ export function createStudyBrowserTabs(
     return dateB - dateA;
   };
   const tabs = [
+    {
+      name: '15days',
+      label: '15 days',
+      studies: fifteenDayStudies.sort((studyA, studyB) => _byDate(studyA.date, studyB.date)),
+    },
     {
       name: 'primary',
       label: 'Primary',

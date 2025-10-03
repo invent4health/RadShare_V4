@@ -30,14 +30,12 @@ export function StudyBrowserViewOptions({ tabs, onSelectTab, activeTabName }: wi
           const isActive = activeTabName === name;
           const isDisabled = !studies.length;
 
-          if (isDisabled) {
-            return null;
-          }
-
           return (
             <DropdownMenuItem
               key={name}
-              className={`text-white ${isActive ? 'font-bold' : ''}`}
+              className={`text-white ${isActive ? 'font-bold' : ''} ${
+                isDisabled ? 'opacity-60' : ''
+              }`}
               onClick={() => handleTabChange(name)}
             >
               {label}

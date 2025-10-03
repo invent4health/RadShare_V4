@@ -67,7 +67,7 @@ export default function PanelStudyBrowserTracking({
     useViewportGrid();
   const [trackedMeasurements, sendTrackedMeasurementsEvent] = useTrackedMeasurements();
 
-  const [activeTabName, setActiveTabName] = useState(studyMode);
+  const [activeTabName, setActiveTabName] = useState('15days');
   const [expandedStudyInstanceUIDs, setExpandedStudyInstanceUIDs] = useState([
     ...StudyInstanceUIDs,
   ]);
@@ -130,7 +130,10 @@ export default function PanelStudyBrowserTracking({
   const { trackedSeries } = trackedMeasurements.context;
 
   useEffect(() => {
-    setActiveTabName(studyMode);
+    // Keep default as 15days unless customization overrides explicitly
+    if (studyMode) {
+      setActiveTabName(studyMode);
+    }
   }, [studyMode]);
 
   // ~~ studyDisplayList

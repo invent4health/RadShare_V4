@@ -161,9 +161,6 @@ const DefaultFallback = ({
   context,
   resetErrorBoundary = () => {},
 }: DefaultFallbackProps) => {
-  if (isProduction) {
-    return null;
-  }
   const { t } = useTranslation('ErrorBoundary');
   const [showDetails, setShowDetails] = useState(false);
   const title = `${t('Something went wrong lets see')}${
@@ -182,24 +179,13 @@ Stack: ${error.stack}
   };
 
   useEffect(() => {
-    // Hide all error toasts - no popups will show
-    // toast.error(title, {
-    //   description: subtitle,
-    //   action: {
-    //     label: t('Show Details'),
-    //     onClick: () => setShowDetails(true),
-    //   },
-    //   duration: 0,
-    // });
+    // Suppress any error toast popups to hide red popup
   }, [error]);
-  // Don't render the details dialog in development mode
-  if (isProduction) {
-    return null;
-  }
+  // In production, we suppress UI unless details explicitly requested
 
   return (
     <>
-      {showDetails && (
+      {!isProduction && showDetails && (
         <div className="error-boundary-overlay fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 p-4">
           <div className="border-input bg-gray-950 h-[50vh] w-full max-w-[900px] rounded border-2 shadow-lg">
             <div className="text-muted-foreground flex items-center justify-between border-b border-gray-800 px-6 py-4 text-xl">
@@ -264,6 +250,14 @@ const ErrorBoundary = ({
   };
 
   // Add error event listener to window
+  const onErrorHandler = React.useCallback(
+    (error: Error, info: { componentStack: string }) => {
+      console.debug(`${context} Error Boundary`, error, info?.componentStack, context);
+      onError(error as ErrorBoundaryError, info?.componentStack, context);
+    },
+    [context, onError]
+  );
+
   useEffect(() => {
     let errorTimeout: NodeJS.Timeout;
 
@@ -293,16 +287,11 @@ const ErrorBoundary = ({
       window.removeEventListener('error', handleError);
       window.removeEventListener('unhandledrejection', handleRejection);
     };
-  }, []);
-
-  const onErrorHandler = (error: ErrorBoundaryError, componentStack: string) => {
-    console.debug(`${context} Error Boundary`, error, componentStack, context);
-    onError(error, componentStack, context);
-  };
+  }, [onErrorHandler]);
 
   return (
     <ReactErrorBoundary
-      fallbackRender={props => (
+      fallbackRender={(props: { error: Error; resetErrorBoundary: () => void }) => (
         <FallbackComponent
           error={props.error}
           context={context}
